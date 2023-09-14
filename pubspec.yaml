@@ -1,0 +1,61 @@
+name: meus_contatos
+description: A new Flutter project.
+
+publish_to: 'none'
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  flutter_slidable: ^3.0.0
+  mask_text_input_formatter: ^2.5.0
+  url_launcher: ^6.1.11
+  flutter_native_splash: ^2.2.19
+  image_picker: ^1.0.2
+  camerawesome: ^2.0.0-dev.1
+  cloud_firestore: ^4.9.0
+  firebase_core: ^2.15.1
+  firebase_storage: ^11.2.6
+  uuid: ^3.0.7
+  http: ^0.13.6
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.png"
+  adaptive_icon_background: "#993399"
+  adaptive_icon_foreground: "assets/logo.png"
+  min_sdk_android: 21
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/logo2.png
+  android_12:
+    image: assets/logo2.png
+    color: "#FFFFFF"
+    icon_background_color: "#FFFFFF"
+  
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/sapo.png
+    - assets/logo.png
+    - assets/logo2.png
+
