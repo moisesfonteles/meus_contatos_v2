@@ -24,6 +24,7 @@ dependencies:
   firebase_core: ^2.15.1
   firebase_storage: ^11.2.6
   uuid: ^3.0.7
+  rxdart: ^0.27.7
   
 
 dev_dependencies:
@@ -57,4 +58,7 @@ flutter:
     - assets/sapo.png
     - assets/logo.png
     - assets/logo2.png
+    - assets/logosemfundo.png
+    - assets/porco.png
+
 

@@ -1,10 +1,12 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:meus_contatos/ui/add_contact_page.dart';
 import 'package:meus_contatos/controller/contact_list_controller.dart';
 import 'package:meus_contatos/ui/contact_page.dart';
 import '../model/contac_model.dart';
+import 'backup_contacts_page.dart';
 
 
 class ContactsListPage extends StatefulWidget {
@@ -40,6 +42,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
             return _controller.onLongPress(snapshot.data!);
           },
           child: Scaffold(
+            drawer: drawerMyContacts(),
             backgroundColor: Colors.grey[100],
             appBar: appBarMyContacts(snapshot.data!),
             body: Padding(
@@ -74,11 +77,37 @@ class _ContactsListPageState extends State<ContactsListPage> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Meus Contatos"),
+          Text("Meus Contatos"),
           const SizedBox(height: 2.0,),
           contacts.length == 1 ? Text("${contacts.length} contato",style: const TextStyle(fontSize: 14)) : contacts.length > 1 ? Text("${contacts.length} contatos",style: const TextStyle(fontSize: 14)) : SizedBox(height: 2.0),
         ],
       ),
+    );
+  }
+
+  Widget drawerMyContacts(){
+    return Drawer(
+      shadowColor: Colors.purple,
+      child: ListView(
+          children: [
+            Container(
+              color: Colors.purple,
+              height: 56,
+              width: double.maxFinite,
+              child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[ Image.asset("assets/logosemfundo.png"), Text("Meus Contatos",style: TextStyle(color: Colors.white, fontSize: 20))]),
+            ),
+            ListTile(
+              leading: Icon(Icons.cloud_download, color: Colors.purple),
+              title: const Text('Baixar backup', style: TextStyle(color: Colors.purple, fontSize: 20)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  BackupContactsPage()),
+                );
+              },
+            ),
+          ],
+      ), 
     );
   }
 
@@ -90,7 +119,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
         itemCount: contacts.length,
         separatorBuilder: (context, index) => Container(height: 2,width: double.infinity,color: Colors.grey.shade200),
         itemBuilder: (BuildContext context, int index ) {
-          return cardContato(contacts[index], index, contacts);
+          return cardContact(contacts[index], index, contacts);
         }
       ),
     );
@@ -112,7 +141,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
     );
   }
 
-  Widget cardContato(Contact contact, int index, List<Contact> contacts){
+  Widget cardContact(Contact contact, int index, List<Contact> contacts){
     return InkWell(
       onLongPress: _controller.longPress ? () {} : () => _controller.onLongPress(contacts, contact),
       onTap: _controller.longPress ? () => _controller.selectContact(contact, contacts) : () async{

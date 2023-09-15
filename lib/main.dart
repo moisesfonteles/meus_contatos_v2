@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meus_contatos/ui/contacts_list_page.dart';
 import 'firebase/firebase_options.dart';
-import 'controller/backup_contacts_controller.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  BackupContactsController().consumeDataJson();
   await Firebase.initializeApp( // Isso inicializa o Firebase no aplicativo Flutter.
     options: DefaultFirebaseOptions.currentPlatform,
   );
