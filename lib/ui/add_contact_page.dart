@@ -5,7 +5,7 @@ import 'package:meus_contatos/controller/add_contact_controller.dart';
 
 
 class AddContactPage extends StatefulWidget {
-  AddContactPage({super.key});
+  const AddContactPage({super.key});
 
   @override
   State<AddContactPage> createState() => _AddContactPageState();
@@ -56,10 +56,10 @@ class _AddContactPageState extends State<AddContactPage> {
                       ),
                     } else ...{
                       CircleAvatar(
-                        child: Icon(Icons.person, size: 70),
                         foregroundImage: FileImage(_controller.photoProfile!),
                         backgroundColor: Colors.purple,
                         maxRadius: 55,
+                        child: Icon(Icons.person, size: 70),
                       ),
                     },
                     Positioned(
@@ -68,7 +68,7 @@ class _AddContactPageState extends State<AddContactPage> {
                       child: InkWell(
                         onTap: () {
                           showModalBottomSheet(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                             context: context,
                             builder: (BuildContext context) => containershowModalBottomSheet()
                           );
@@ -116,9 +116,9 @@ class _AddContactPageState extends State<AddContactPage> {
               stream: _controller.streamButtonAdd.stream,
               builder: (context, snapshot) {
                 return ElevatedButton(
-                  style: ElevatedButton.styleFrom(fixedSize:  Size(double.maxFinite, 62)),
+                  style: ElevatedButton.styleFrom(fixedSize:  const Size(double.maxFinite, 62)),
                   onPressed: _controller.uploadPhotoLoading ? () {} : () => _controller.clickAddContact(context),
-                  child: _controller.uploadPhotoLoading ? CircularProgressIndicator(color: Colors.white) : const Text("Adicionar", style: TextStyle(fontSize: 16)),
+                  child: _controller.uploadPhotoLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Adicionar", style: TextStyle(fontSize: 16)),
                 );
               }
             ),
@@ -130,16 +130,16 @@ class _AddContactPageState extends State<AddContactPage> {
 
   Widget containershowModalBottomSheet(){
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.purple,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
-      padding: EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(25.0),
       height: 150,
       child: Column(
         children: [
-          Row(  children: [Text("Foto do perfil", style: TextStyle(fontSize: 18, color: Colors.white))]),
-          SizedBox(height: 24.0),
+          Row(  children: const [Text("Foto do perfil", style: TextStyle(fontSize: 18, color: Colors.white))]),
+          const SizedBox(height: 24.0),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -147,7 +147,7 @@ class _AddContactPageState extends State<AddContactPage> {
               InkWell(
                 onTap:() async => await _controller.captureImageCamera(context),
                 child: Column(
-                  children: [
+                  children: const [
                     Icon(Icons.camera_alt, color: Colors.white),
                     SizedBox(height: 8.0),
                     Text("Câmera", style: TextStyle(color: Colors.white)),
@@ -157,7 +157,7 @@ class _AddContactPageState extends State<AddContactPage> {
               InkWell(
                 onTap:() async => await _controller.takeImageGallery(context),
                 child: Column(
-                  children: [
+                  children: const [
                     Icon(Icons.photo, color: Colors.white),
                     SizedBox(height: 8.0),
                     Text("Galeria", style: TextStyle(color: Colors.white)),
@@ -169,7 +169,7 @@ class _AddContactPageState extends State<AddContactPage> {
                   child: Column(
                     children: [
                       Icon(Icons.delete, color: Colors.purple[400]),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Text("Excluir", style: TextStyle(color: Colors.purple[400])),
                     ],
                   ),
@@ -197,7 +197,7 @@ class _AddContactPageState extends State<AddContactPage> {
                     );
                   },
                   child: Column(
-                    children: [
+                    children: const [
                       Icon(Icons.delete, color: Colors.white),
                       SizedBox(height: 8.0),
                       Text("Excluir", style: TextStyle(color: Colors.white)),

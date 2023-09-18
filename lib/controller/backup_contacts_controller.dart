@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:meus_contatos/model/other_contacts_model.dart';
@@ -21,6 +22,7 @@ class BackupContactsController {
     listJson = (jsonDecode(future.body)as List).map((e) {
       return OtherContact.fromJson(e);
     }).toList();
+    log(future.body);
     behaviorListOtherContacts.sink.add(listJson);
     streamDownloadFinished.sink.add(true);
     return jsonDecode(future.body);

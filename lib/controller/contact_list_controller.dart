@@ -38,7 +38,9 @@ class ContactsListController{
 
   Future<bool> onLongPress(List<Contact> contacts, [Contact? contact]) {
     if (longPress) {
-      contacts.forEach((e) => e.isSelected = false);
+      for (var e in contacts) {
+        e.isSelected = false;
+      }
       countSelect = 0;
       longPress = false;
       streamContatsList.sink.add(contacts);

@@ -33,7 +33,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
   Widget build(BuildContext context) {
     return StreamBuilder<List<Contact>>(
       stream: _controller.streamContatsList.stream,
-      initialData: [],
+      initialData: const [],
       builder: (context, snapshot) {
         return WillPopScope(
           onWillPop: () {
@@ -50,7 +50,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if(!_controller.loadingFirestoreEnd) ...{
-                        CircularProgressIndicator(),
+                        const CircularProgressIndicator(),
                     } else if(snapshot.data!.isEmpty && _controller.loadingFirestoreEnd)...{
                       contactListIsEmpty(),
                     } else ...{
@@ -69,15 +69,15 @@ class _ContactsListPageState extends State<ContactsListPage> {
 
   AppBar appBarMyContacts(List<Contact> contacts){
     return AppBar(
-      leading: _controller.longPress? InkWell(onTap: () => _controller.onLongPress(contacts), child: Icon(Icons.arrow_back)) : null,
+      leading: _controller.longPress? InkWell(onTap: () => _controller.onLongPress(contacts), child: const Icon(Icons.arrow_back)) : null,
       title: _controller.longPress ? 
       Title(color: Colors.white, child: Text("${_controller.countSelect} selecionado(s)")) :
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Meus Contatos"),
+          const Text("Meus Contatos"),
           const SizedBox(height: 2.0,),
-          contacts.length == 1 ? Text("${contacts.length} contato",style: const TextStyle(fontSize: 14)) : contacts.length > 1 ? Text("${contacts.length} contatos",style: const TextStyle(fontSize: 14)) : SizedBox(height: 2.0),
+          contacts.length == 1 ? Text("${contacts.length} contato",style: const TextStyle(fontSize: 14)) : contacts.length > 1 ? Text("${contacts.length} contatos",style: const TextStyle(fontSize: 14)) : const SizedBox(height: 2.0),
         ],
       ),
     );
@@ -94,16 +94,16 @@ class _ContactsListPageState extends State<ContactsListPage> {
                 color: Colors.purple,
                 height: 56,
                 width: double.maxFinite,
-                child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[ Image.asset("assets/logosemfundo.png"), Text("Meus Contatos",style: TextStyle(color: Colors.white, fontSize: 20))]),
+                child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[ Image.asset("assets/logosemfundo.png"), const Text("Meus Contatos",style: TextStyle(color: Colors.white, fontSize: 20))]),
               ),
             ),
             ListTile(
-              leading: Icon(Icons.cloud_download, color: Colors.purple),
+              leading: const Icon(Icons.cloud_download, color: Colors.purple),
               title: const Text('Baixar backup', style: TextStyle(color: Colors.purple, fontSize: 20)),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>  BackupContactsPage()),
+                  MaterialPageRoute(builder: (context) =>  const BackupContactsPage()),
                 );
               },
             ),
@@ -115,7 +115,6 @@ class _ContactsListPageState extends State<ContactsListPage> {
   Widget contactsList(List<Contact> contacts){
     return Expanded(
       child: ListView.separated(
-        padding: const EdgeInsets.only(bottom: 75.0),
         shrinkWrap: true,
         itemCount: contacts.length,
         separatorBuilder: (context, index) => Container(height: 2,width: double.infinity,color: Colors.grey.shade200),
@@ -182,7 +181,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(color: contact.isSelected ? Colors.purple[50] : null, borderRadius: BorderRadius.all(Radius.circular(10))),
+              decoration: BoxDecoration(color: contact.isSelected ? Colors.purple[50] : null, borderRadius: const BorderRadius.all(Radius.circular(10))),
               margin: const EdgeInsets.all(6.0),
               padding: const EdgeInsets.all(12.0),
               child: Row(
@@ -190,14 +189,14 @@ class _ContactsListPageState extends State<ContactsListPage> {
                   if(contact.profileUrl == null) ...{
                     contact.isSelected ? CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.check, color: Colors.purple[100],)) :
                     const CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.person)),
-                    SizedBox(width: 2.0),
+                    const SizedBox(width: 2.0),
                   } else ...{
                     contact.isSelected ? CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.check, color: Colors.purple[100],)) :
                     CircleAvatar(
                       backgroundColor: Colors.purple, 
                       foregroundImage: NetworkImage(contact.profileUrl as String),
-                      child: CircleAvatar(backgroundColor: Colors.purple ,maxRadius: 8, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 1.0))),
-                      SizedBox(width: 2.0),
+                      child: const CircleAvatar(backgroundColor: Colors.purple ,maxRadius: 8, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 1.0))),
+                      const SizedBox(width: 2.0),
                   },            
                   const SizedBox(width: 8),
                   Expanded(
@@ -247,7 +246,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
       } : () async{
         Contact contact = await Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  AddContactPage()),
+          MaterialPageRoute(builder: (context) =>  const AddContactPage()),
         );
         contacts.add(contact);
         contacts.sort((a, b) => a.name!.compareTo(b.name!));

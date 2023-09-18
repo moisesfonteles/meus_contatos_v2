@@ -11,7 +11,7 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  CameraController _controller = CameraController();
+  final CameraController _controller = CameraController();
 
   @override
   void dispose() {
@@ -29,7 +29,7 @@ class _CameraPageState extends State<CameraPage> {
           backgroundColor: Colors.black,
           body: snapshot.data != null ? layoutImageCaptured(snapshot) : AspectRatio(
             aspectRatio: MediaQuery.of(context).size.width/MediaQuery.of(context).size.height,
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: CameraAwesomeBuilder.custom(
@@ -68,8 +68,8 @@ class _CameraPageState extends State<CameraPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            decoration: BoxDecoration(color: Colors.transparent),
-            padding: EdgeInsets.symmetric(vertical: 30),
+            decoration: const BoxDecoration(color: Colors.transparent),
+            padding: const EdgeInsets.symmetric(vertical: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -103,18 +103,18 @@ class _CameraPageState extends State<CameraPage> {
             ),
           ),
           Container(
-            decoration: BoxDecoration(color: Colors.transparent),
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+            decoration: const BoxDecoration(color: Colors.transparent),
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
             child: Row(                  
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                     maxRadius: 26,
                     backgroundColor: Colors.transparent,
                   ),
                 InkWell(
                   splashColor: Colors.purple,
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
                   onTap: () async => await _controller.clickTouchCamera(state, context),
                   child: buttonCamera(),
                 ),
@@ -147,7 +147,7 @@ class _CameraPageState extends State<CameraPage> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                CircularProgressIndicator(),
+                const CircularProgressIndicator(),
                 Image.file(snapshot.data!),
               ]
             ),
@@ -156,20 +156,20 @@ class _CameraPageState extends State<CameraPage> {
         Container(
           color: Colors.black,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 64),
+            padding: const EdgeInsets.symmetric(horizontal: 64),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
                   onPressed: () => _controller.repeatPhoto(),
-                  child: Text("Repetir", style: TextStyle(color: Colors.white, fontSize: 20)),
+                  child: const Text("Repetir", style: TextStyle(color: Colors.white, fontSize: 20)),
                 ),
                 TextButton(
                   onPressed: () {
                     widget.photoCamera = snapshot.data;
                     Navigator.pop(context, snapshot.data);
                   },
-                  child: Text("OK", style: TextStyle(color: Colors.white, fontSize: 20)),
+                  child: const Text("OK", style: TextStyle(color: Colors.white, fontSize: 20)),
                 ),
               ],
             ),
@@ -181,58 +181,58 @@ class _CameraPageState extends State<CameraPage> {
 
   Widget iconFlash() {
     if(_controller.flash == FlashMode.none){
-      return AwesomeOrientedWidget(
-        child: Icon(Icons.flash_off, color: Colors.white),
+      return const AwesomeOrientedWidget(
         rotateWithDevice: true,
+        child: Icon(Icons.flash_off, color: Colors.white),
       );
     } else if(_controller.flash == FlashMode.auto) {
-      return AwesomeOrientedWidget(
-        child: Icon(Icons.flash_auto, color: Colors.white),
+      return const AwesomeOrientedWidget(
         rotateWithDevice: true,
+        child: Icon(Icons.flash_auto, color: Colors.white),
       );
     } else{
-      return AwesomeOrientedWidget(
-        child: Icon(Icons.flash_on, color: Colors.white),
+      return const AwesomeOrientedWidget(
         rotateWithDevice: true,
+        child: Icon(Icons.flash_on, color: Colors.white),
       );
     }
   }
 
   Widget textRatio() {
     if(_controller.ratio == CameraAspectRatios.ratio_4_3){
-      return AwesomeOrientedWidget(
-        child: Text("3:4", style: TextStyle(color: Colors.white, fontSize: 22)),
+      return const AwesomeOrientedWidget(
         rotateWithDevice: true,
+        child: Text("3:4", style: TextStyle(color: Colors.white, fontSize: 22)),
       );
     } else if(_controller.ratio == CameraAspectRatios.ratio_16_9) {
-      return AwesomeOrientedWidget(
-        child: Text("9:16", style: TextStyle(color: Colors.white, fontSize: 22)),
+      return const AwesomeOrientedWidget(
         rotateWithDevice: true,
+        child: Text("9:16", style: TextStyle(color: Colors.white, fontSize: 22)),
       );
     } else{
-      return AwesomeOrientedWidget(
-        child: Text("1:1", style: TextStyle(color: Colors.white, fontSize: 22)),
+      return const AwesomeOrientedWidget(
         rotateWithDevice: true,
+        child: Text("1:1", style: TextStyle(color: Colors.white, fontSize: 22)),
       );
     }
   }
 
   Widget iconSensor() {
     if(_controller.sensorPosition == SensorPosition.back) {
-      return AwesomeOrientedWidget(
-        child: Icon(Icons.camera_front, color: Colors.white, size: 30),
+      return const AwesomeOrientedWidget(
         rotateWithDevice: true,
+        child: Icon(Icons.camera_front, color: Colors.white, size: 30),
       );
     } else {
-      return AwesomeOrientedWidget(
-        child: Icon(Icons.camera_rear, color: Colors.white, size: 30),
+      return const AwesomeOrientedWidget(
         rotateWithDevice: true,
+        child: Icon(Icons.camera_rear, color: Colors.white, size: 30),
       );
     }
   }
 
   Widget buttonCamera() {
-    return CircleAvatar(
+    return const CircleAvatar(
       maxRadius: 40,
       backgroundColor: Colors.grey,
       child: CircleAvatar(

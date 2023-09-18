@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:meus_contatos/model/other_contacts_model.dart';
 
 import '../controller/backup_contacts_controller.dart';
+import 'contact_json_page.dart';
 
 class BackupContactsPage extends StatefulWidget {
   const BackupContactsPage({super.key});
@@ -29,10 +30,10 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
         return Scaffold(
           appBar: appBarOtherContacts(),
           body: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: snapshot.data! ? downloadContactsFinished() : downloadContactsPending(),
           ),
-          floatingActionButton: floatActionButton(snapshot.data!),
+          floatingActionButton: snapshot.data == true ? null : floatActionButton(snapshot.data!),
         );
       }
     );
@@ -43,9 +44,9 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _controller.listJson.isEmpty ? Text("Baixar backup") : Text("Adicionar"),
+          const Text("Baixar backup"),
           const SizedBox(height: 2.0,),
-          _controller.listJson.isEmpty ?  SizedBox(height: 2.0) : Text("${_controller.listJson.length} contatos registrados ", style: TextStyle(fontSize: 14))
+          _controller.listJson.isEmpty ?  const SizedBox(height: 2.0) : Text("${_controller.listJson.length} contatos registrados ", style: const TextStyle(fontSize: 14))
         ],
       ),
     );
@@ -58,7 +59,7 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
         children: [
           Image.asset("assets/porco.png", width: 200, height: 200),
           const SizedBox(height: 8.0),
-          Text("Z z z ..." ,style: TextStyle(fontSize: 25)),
+          const Text("Z z z ..." ,style: TextStyle(fontSize: 25)),
           const SizedBox(height: 8.0),
           const Text("Baixe seus contatos da nuvem!", textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
         ],
@@ -68,14 +69,16 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
 
   Widget cardContactJson(List<OtherContact> contactJson, int index, OtherContact otherContact) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ContactJsonPage(otherContacts: contactJson, otherContact: otherContact, index: index)));
+      },
       child: Container(
         margin: const EdgeInsets.all(6.0),
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
             const CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.person)),
-            SizedBox(width: 2.0),
+            const SizedBox(width: 2.0),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -99,10 +102,9 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
         stream: _controller.behaviorListOtherContacts.stream,
         builder: (context, snapshot) {
           if(snapshot.data == null) {
-            return CircularProgressIndicator(color: Colors.purple);
+            return const CircularProgressIndicator(color: Colors.purple);
           }
           return ListView.separated(
-            padding: const EdgeInsets.only(bottom: 75.0),
             itemBuilder: (BuildContext context, int index) {
               return cardContactJson(snapshot.data!, index, snapshot.data![index]);
             }, 
@@ -118,7 +120,7 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
     return FloatingActionButton(
       backgroundColor: Colors.purple,
       onPressed: () => _controller.consumeDataJson(),
-      child: downloadFinished == true ? Icon(Icons.check) : Icon(Icons.cloud_download),
+      child: downloadFinished == true ? const Icon(Icons.check) : const Icon(Icons.cloud_download),
     );
   }
 

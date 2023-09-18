@@ -87,7 +87,7 @@ class _ContactPageState extends State<ContactPage> {
                                     backgroundColor: Colors.purple,
                                     foregroundImage: (snapshot.data != null ?  FileImage(_controller.photoProfile!) : NetworkImage(widget.contact.profileUrl as String) as ImageProvider<Object>),
                                     maxRadius: 50,
-                                    child: CircularProgressIndicator(color: Colors.white),
+                                    child: const CircularProgressIndicator(color: Colors.white),
                                   ),
                                 ),
                               },
@@ -97,7 +97,7 @@ class _ContactPageState extends State<ContactPage> {
                                 child: InkWell(
                                   onTap: () {
                                     showModalBottomSheet(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                                       context: context,
                                       builder: (BuildContext context) => containershowModalBottomSheet()
                                     );
@@ -122,7 +122,7 @@ class _ContactPageState extends State<ContactPage> {
                       decoration: const InputDecoration(border: OutlineInputBorder(),labelText: "Nome"),
                       validator:(String? value) => _controller.validatorName(value),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _controller.phoneController,
@@ -131,7 +131,7 @@ class _ContactPageState extends State<ContactPage> {
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly, _controller.maskFormatter],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: _controller.emailController,
                       decoration: const InputDecoration(border: OutlineInputBorder(),labelText: "E-mail (Opcional)",hintText: "nome@email.com"),
@@ -152,7 +152,7 @@ class _ContactPageState extends State<ContactPage> {
                             stream: _controller.streamUploadPhoto.stream,
                             builder: (context, snapshot) {
                               return ElevatedButton(
-                                style: ElevatedButton.styleFrom(fixedSize:  Size(double.maxFinite, 60)),
+                                style: ElevatedButton.styleFrom(fixedSize:  const Size(double.maxFinite, 60)),
                                 onPressed: _controller.uploadPhotoLoading ? () {} : () {
                                   _controller.clickEditContact();
                                   _controller.nameController.text = widget.contact.name as String;
@@ -173,13 +173,13 @@ class _ContactPageState extends State<ContactPage> {
                             stream: _controller.streamUploadPhoto.stream,
                             builder: (context, snapshot) {
                               return ElevatedButton(
-                                style: ElevatedButton.styleFrom(fixedSize:  Size(double.maxFinite, 60)),
+                                style: ElevatedButton.styleFrom(fixedSize:  const Size(double.maxFinite, 60)),
                                 onPressed: _controller.uploadPhotoLoading ? () {} : () async {
                                   _controller.uploadingPhoto();
                                   await _controller.clickSaveContact(widget.contact, context);
                                   _controller.uploadingPhoto();
                                 },
-                                child: _controller.uploadPhotoLoading ? CircularProgressIndicator(color: Colors.white) : const Text("Salvar", style: TextStyle(fontSize: 16)),
+                                child: _controller.uploadPhotoLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Salvar", style: TextStyle(fontSize: 16)),
                               );
                             }
                           ),
@@ -191,7 +191,7 @@ class _ContactPageState extends State<ContactPage> {
                       CircleAvatar(
                         backgroundColor: Colors.grey[100],
                         maxRadius: 55,
-                        child: CircleAvatar(backgroundColor: Colors.purple, maxRadius: 50, child: Icon(Icons.person,size: 70)),
+                        child: const CircleAvatar(backgroundColor: Colors.purple, maxRadius: 50, child: Icon(Icons.person,size: 70)),
                       ),
                     } else ...{
                       CircleAvatar(
@@ -204,28 +204,28 @@ class _ContactPageState extends State<ContactPage> {
                               backgroundColor: Colors.purple,
                               foregroundImage: (_controller.photoProfile != null ?  FileImage(_controller.photoProfile!) : NetworkImage(widget.contact.profileUrl as String) as ImageProvider<Object>),
                               maxRadius: 50,
-                              child: CircularProgressIndicator(color: Colors.white),
+                              child: const CircularProgressIndicator(color: Colors.white),
                             );
                           }
                         ),
                       ),
                     },
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     Text(widget.contact.name as String, textAlign: TextAlign.center, style: const TextStyle(fontSize: 25)),
-                    SizedBox(height: 12.0),
+                    const SizedBox(height: 12.0),
                     Text(widget.contact.phone as String, style: const TextStyle(fontSize: 19)),
                     if(widget.contact.email!.isNotEmpty) ...{
-                      SizedBox(height: 12.0),
+                      const SizedBox(height: 12.0),
                       Text(widget.contact.email as String, textAlign: TextAlign.center, style: const TextStyle(fontSize: 19)),
                     },
                     const SizedBox(height: 20.0),
                     Container(
                       height: 2,
                       width: double.infinity,
-                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       color: Colors.grey.shade200,
                     ),
-                    SizedBox(height: 20.0),
+                    // const SizedBox(height: 20.0,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -293,16 +293,16 @@ class _ContactPageState extends State<ContactPage> {
 
   Widget containershowModalBottomSheet(){
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.purple,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
-      padding: EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(25.0),
       height: 150,
       child: Column(
         children: [
-          Row(children: [Text("Foto do perfil", style: TextStyle(fontSize: 18, color: Colors.white))]),
-          SizedBox(height: 24.0),
+          Row(children: const [Text("Foto do perfil", style: TextStyle(fontSize: 18, color: Colors.white))]),
+          const SizedBox(height: 24.0),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -313,7 +313,7 @@ class _ContactPageState extends State<ContactPage> {
                   Navigator.pop(context);
                 },
                 child: Column(
-                  children: [
+                  children: const [
                     Icon(Icons.camera_alt, color: Colors.white),
                     SizedBox(height: 8.0),
                     Text("Camera", style: TextStyle(color: Colors.white)),
@@ -325,7 +325,7 @@ class _ContactPageState extends State<ContactPage> {
                   await _controller.takeImageGallery(context);
                 },
                 child: Column(
-                  children: [
+                  children: const [
                     Icon(Icons.photo, color: Colors.white),
                     SizedBox(height: 8.0),
                     Text("Galeria", style: TextStyle(color: Colors.white)),
@@ -337,7 +337,7 @@ class _ContactPageState extends State<ContactPage> {
                   child: Column(
                     children: [
                       Icon(Icons.delete, color: Colors.purple[400]),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Text("Excluir", style: TextStyle(color: Colors.purple[400])),
                     ],
                   ),
@@ -371,7 +371,7 @@ class _ContactPageState extends State<ContactPage> {
                     );
                   },
                   child: Column(
-                    children: [
+                    children: const [
                       Icon(Icons.delete, color: Colors.white),
                       SizedBox(height: 8.0),
                       Text("Excluir", style: TextStyle(color: Colors.white)),
