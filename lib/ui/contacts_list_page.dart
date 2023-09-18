@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:meus_contatos/ui/add_contact_page.dart';
@@ -42,7 +40,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
             return _controller.onLongPress(snapshot.data!);
           },
           child: Scaffold(
-            drawer: drawerMyContacts(),
+            drawer: drawerMyContacts(snapshot.data!),
             backgroundColor: Colors.grey[100],
             appBar: appBarMyContacts(snapshot.data!),
             body: Padding(
@@ -85,16 +83,19 @@ class _ContactsListPageState extends State<ContactsListPage> {
     );
   }
 
-  Widget drawerMyContacts(){
+  Widget drawerMyContacts(List<Contact> contacts){
     return Drawer(
       shadowColor: Colors.purple,
       child: ListView(
           children: [
-            Container(
-              color: Colors.purple,
-              height: 56,
-              width: double.maxFinite,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[ Image.asset("assets/logosemfundo.png"), Text("Meus Contatos",style: TextStyle(color: Colors.white, fontSize: 20))]),
+            InkWell(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                color: Colors.purple,
+                height: 56,
+                width: double.maxFinite,
+                child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[ Image.asset("assets/logosemfundo.png"), Text("Meus Contatos",style: TextStyle(color: Colors.white, fontSize: 20))]),
+              ),
             ),
             ListTile(
               leading: Icon(Icons.cloud_download, color: Colors.purple),

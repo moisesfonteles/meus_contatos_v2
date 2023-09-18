@@ -1,13 +1,14 @@
 
 import 'dart:async';
-import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:meus_contatos/model/other_contacts_model.dart';
+import 'package:rxdart/rxdart.dart';
 
 class BackupContactsController {
   StreamController<bool> streamDownloadFinished = StreamController<bool>.broadcast();
-  StreamController<List<OtherContact>> streamListOtherContacts = StreamController<List<OtherContact>>.broadcast();
+  BehaviorSubject<List<OtherContact>> behaviorListOtherContacts = BehaviorSubject<List<OtherContact>>();
+  List<OtherContact> listJson = [];
   Uri uri = Uri.https("jsonplaceholder.typicode.com" , "/users");
 
   void disposeStream(){
@@ -17,13 +18,11 @@ class BackupContactsController {
 
   Future<List<dynamic>> consumeDataJson() async {
     final future = await http.get(uri);
-    List<OtherContact> listJson = (jsonDecode(future.body)as List).map((e) {
+    listJson = (jsonDecode(future.body)as List).map((e) {
       return OtherContact.fromJson(e);
-    }).toList();    
-    log("data inicio ${DateTime.now()}");
-    streamListOtherContacts.sink.add(listJson);
+    }).toList();
+    behaviorListOtherContacts.sink.add(listJson);
     streamDownloadFinished.sink.add(true);
-    log("data final ${DateTime.now()}");
     return jsonDecode(future.body);
   }
 }

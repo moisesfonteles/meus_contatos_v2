@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:meus_contatos/model/other_contacts_model.dart';
@@ -28,66 +27,82 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
       initialData: false,
       builder: (context, snapshot) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text("Baixar backup"),
-          ),
+          appBar: appBarOtherContacts(),
           body: Padding(
             padding: EdgeInsets.all(16),
-            child: snapshot.data! ? downloadContactsOk() : downloadContacts(),
+            child: snapshot.data! ? downloadContactsFinished() : downloadContactsPending(),
           ),
-          floatingActionButton: floatActionButton(),
+          floatingActionButton: floatActionButton(snapshot.data!),
         );
       }
     );
   }
 
-  Widget downloadContacts() {
+  AppBar appBarOtherContacts() {
+    return AppBar(
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _controller.listJson.isEmpty ? Text("Baixar backup") : Text("Adicionar"),
+          const SizedBox(height: 2.0,),
+          _controller.listJson.isEmpty ?  SizedBox(height: 2.0) : Text("${_controller.listJson.length} contatos registrados ", style: TextStyle(fontSize: 14))
+        ],
+      ),
+    );
+  }
+
+  Widget downloadContactsPending() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/porco.png", width: 300, height: 300),
+          Image.asset("assets/porco.png", width: 200, height: 200),
+          const SizedBox(height: 8.0),
+          Text("Z z z ..." ,style: TextStyle(fontSize: 25)),
+          const SizedBox(height: 8.0),
+          const Text("Baixe seus contatos da nuvem!", textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
         ],
       ),
     );
   }
 
   Widget cardContactJson(List<OtherContact> contactJson, int index, OtherContact otherContact) {
-    return Container(
-      margin: const EdgeInsets.all(6.0),
-      padding: const EdgeInsets.all(12.0),
-      child: Row(
-        children: [
-          const CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.person)),
-          SizedBox(width: 2.0),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('${otherContact.name}', style: const TextStyle(color: Colors.black, fontSize: 20), overflow: TextOverflow.ellipsis, maxLines: 1),
-                const SizedBox(height: 2.0),
-                Text('${otherContact.phone}', style: const TextStyle(color: Colors.black)),
-              ],
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          children: [
+            const CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.person)),
+            SizedBox(width: 2.0),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${otherContact.name}', style: const TextStyle(color: Colors.black, fontSize: 20), overflow: TextOverflow.ellipsis, maxLines: 1),
+                  const SizedBox(height: 2.0),
+                  Text('${otherContact.phone}', style: const TextStyle(color: Colors.black)),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget downloadContactsOk() {
+  Widget downloadContactsFinished() {
     return Center(
       child: StreamBuilder<List<OtherContact>>(
-        stream: _controller.streamListOtherContacts.stream,
+        stream: _controller.behaviorListOtherContacts.stream,
         builder: (context, snapshot) {
-          log("-=-=-=-=-");
-          log("length: ${snapshot.data?.length} | ${DateTime.now()}");
-          log("-=-=-=-=-");
           if(snapshot.data == null) {
-            return Text("OK");
+            return CircularProgressIndicator(color: Colors.purple);
           }
           return ListView.separated(
+            padding: const EdgeInsets.only(bottom: 75.0),
             itemBuilder: (BuildContext context, int index) {
               return cardContactJson(snapshot.data!, index, snapshot.data![index]);
             }, 
@@ -99,11 +114,11 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
     );
   }
 
-  Widget floatActionButton() {
+  Widget floatActionButton(bool downloadFinished) {
     return FloatingActionButton(
       backgroundColor: Colors.purple,
       onPressed: () => _controller.consumeDataJson(),
-      child: Icon(Icons.cloud_download),
+      child: downloadFinished == true ? Icon(Icons.check) : Icon(Icons.cloud_download),
     );
   }
 
