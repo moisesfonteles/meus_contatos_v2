@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:meus_contatos/controller/add_contact_controller.dart';
+import 'package:meus_contatos/extension/extension.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../ui/camera_page.dart';
 import '../model/contac_model.dart';
@@ -109,23 +110,17 @@ class ContactController{
           contact.profileUrl = profileUrl;
           deleteImageStorage(contact.uid as String);
         }
-      } 
-      if(emailController.text.isEmpty){
-        contact.name = capitalizeWords(nameController.text.trim());
-        contact.phone = phoneController.text;
-        contact.photoProfile = photoProfile;
-      } else{
-        contact.name = capitalizeWords(nameController.text.trim());
-        contact.phone = phoneController.text;
-        contact.email = emailController.text.toLowerCase().replaceAll(" ", "");
-        contact.photoProfile = photoProfile;
       }
+      contact.name = nameController.text.trim().capitalizeWords();
+      contact.phone = phoneController.text;
+      contact.email = emailController.text.toLowerCase().replaceAll(" ", "");
+      contact.photoProfile = photoProfile;
       contacts.sort((a, b) => a.name!.compareTo(b.name!));
       editingContact = false;
       streamEditContact.sink.add(editingContact);
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       firestore.collection("Contato").doc(contact.uid).update({
-        "nome": capitalizeWords(nameController.text.trim()), "telefone": phoneController.text, "email": emailController.text.toLowerCase(), "fotoUrl": profileUrl
+        "nome": nameController.text.trim().capitalizeWords(), "telefone": phoneController.text, "email": emailController.text.toLowerCase(), "fotoUrl": profileUrl
       });
     }
     comeBack = true;
@@ -174,21 +169,24 @@ class ContactController{
   }
 
   Future<void> captureImageCamera(BuildContext context) async{
+    NavigatorState navigator = Navigator.of(context);
     File? file =  await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) =>  CameraPage(photoCamera: photoProfile)),
     );
     photoProfile = file;
     streamPhotoProfile.sink.add(photoProfile);
+    navigator.pop();
   }
 
   Future<void> takeImageGallery(context) async{
+    NavigatorState navigator = Navigator.of(context);
     final XFile? imageGallery = await imagePicker.pickImage(source: ImageSource.gallery);
     if(imageGallery != null){ 
       photoProfile = File(imageGallery.path);
     }
     streamPhotoProfile.sink.add(photoProfile);
-    Navigator.of(context).pop();
+    navigator.pop();
   }
 
   Future<void> removeImage(Contact contact) async{
@@ -221,15 +219,5 @@ class ContactController{
     String ref = "images/$uid";
     await storage.ref(ref).delete();
     return ref;
-  }
-
-  String capitalizeWords(String nameController) {
-    List<String> words = nameController.split(" ");
-    for(int i = 0; i < words.length; i++){
-      if(words[i].isNotEmpty){
-        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
-      }
-    }
-    return words.join(" ");
   }
 }

@@ -1,16 +1,18 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:meus_contatos/controller/contact_json_controller.dart';
 import 'package:meus_contatos/model/other_contacts_model.dart';
+import 'package:meus_contatos/ui/map_json_page.dart';
 
 class ContactJsonPage extends StatefulWidget {
-  List<OtherContact> otherContacts;
-  OtherContact otherContact;
-  int index;
+  final List<OtherContact> otherContacts;
+  final OtherContact otherContact;
+  final int index;
 
-  ContactJsonPage({super.key, required this.otherContacts, required this.otherContact, required this.index});
+  const ContactJsonPage({super.key, required this.otherContacts, required this.otherContact, required this.index});
 
   @override
   State<ContactJsonPage> createState() => _ContactJsonPageState();
@@ -93,7 +95,7 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
     return FlutterMap(
       options: MapOptions(
         zoom: 16,
-        center: LatLng(51.509364, -0.128928),
+        center: LatLng(double.parse("${widget.otherContact.address?.geo?.lat}"), double.parse("${widget.otherContact.address?.geo?.lng}")),
         minZoom: 10.0,
         maxZoom: 18
       ),
@@ -101,6 +103,27 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+        ),
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: LatLng(double.parse("${widget.otherContact.address?.geo?.lat}"), double.parse("${widget.otherContact.address?.geo?.lng}")),
+              width: 40,
+              height: 40,
+              builder: (context) => Image.asset("assets/pin.png"),
+            ),
+          ],
+        ),
+        InkWell(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MapContactJson(otherContact: widget.otherContact, index: widget.index,)));
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: const [
+              Icon(Icons.fullscreen, color: Colors.black87, size: 34),
+            ],
+          ),
         ),
       ],
     );

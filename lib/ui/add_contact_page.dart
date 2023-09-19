@@ -59,7 +59,7 @@ class _AddContactPageState extends State<AddContactPage> {
                         foregroundImage: FileImage(_controller.photoProfile!),
                         backgroundColor: Colors.purple,
                         maxRadius: 55,
-                        child: Icon(Icons.person, size: 70),
+                        child: const Icon(Icons.person, size: 70),
                       ),
                     },
                     Positioned(

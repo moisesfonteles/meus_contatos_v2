@@ -27,6 +27,8 @@ dependencies:
   rxdart: ^0.27.7
   flutter_map: ^4.0.0
   latlong2: ^0.8.2
+  http: ^0.13.6
+  sqflite: ^2.2.8+4
   
 
 dev_dependencies:
@@ -58,10 +60,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/sapo.png
-    - assets/logo.png
-    - assets/logo2.png
-    - assets/logosemfundo.png
-    - assets/porco.png
+    - assets/
 
 

@@ -99,7 +99,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
             ),
             ListTile(
               leading: const Icon(Icons.cloud_download, color: Colors.purple),
-              title: const Text('Baixar backup', style: TextStyle(color: Colors.purple, fontSize: 20)),
+              title: const Text("Baixar backup", style: TextStyle(color: Colors.purple, fontSize: 20)),
               onTap: () {
                 Navigator.push(
                   context,

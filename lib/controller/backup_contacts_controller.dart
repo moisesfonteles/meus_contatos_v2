@@ -1,7 +1,6 @@
 
 import 'dart:async';
-import 'dart:developer';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:meus_contatos/model/other_contacts_model.dart';
 import 'package:rxdart/rxdart.dart';
@@ -17,15 +16,13 @@ class BackupContactsController {
     streamDownloadFinished.close();
   }
 
-  Future<List<dynamic>> consumeDataJson() async {
-    final future = await http.get(uri);
+  Future<void> consumeDataJson() async {
+    final future = await get(uri);
     listJson = (jsonDecode(future.body)as List).map((e) {
       return OtherContact.fromJson(e);
     }).toList();
-    log(future.body);
     behaviorListOtherContacts.sink.add(listJson);
     streamDownloadFinished.sink.add(true);
-    return jsonDecode(future.body);
   }
 }
 //https://jsonplaceholder.typicode.com/users

@@ -3,6 +3,7 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:meus_contatos/controller/camera_controller.dart';
 
+// ignore: must_be_immutable
 class CameraPage extends StatefulWidget {
   File? photoCamera;
   CameraPage({super.key, required this.photoCamera});
@@ -63,79 +64,77 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Widget layoutCamera(state){
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            decoration: const BoxDecoration(color: Colors.transparent),
-            padding: const EdgeInsets.symmetric(vertical: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                StreamBuilder(
-                  stream: _controller.streamCameraState.stream,
-                  builder: (context, snapshot) {
-                    return InkWell(
-                      onTap:() => _controller.touchesFlash(state),
-                      child: CircleAvatar(
-                        maxRadius: 26,
-                        backgroundColor: Colors.grey[900],
-                        child: iconFlash()
-                      ),
-                    );
-                  }
-                ),
-                StreamBuilder(
-                  stream: _controller.streamCameraState.stream,
-                  builder: (context, snapshot) {
-                    return InkWell(
-                      onTap: () => _controller.touchesRatio(state),
-                      child: CircleAvatar(
-                        maxRadius: 26,
-                        backgroundColor: Colors.grey[900],
-                        child: textRatio()
-                      ),
-                    );
-                  }
-                ),
-              ],
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          decoration: const BoxDecoration(color: Colors.transparent),
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              StreamBuilder(
+                stream: _controller.streamCameraState.stream,
+                builder: (context, snapshot) {
+                  return InkWell(
+                    onTap:() => _controller.touchesFlash(state),
+                    child: CircleAvatar(
+                      maxRadius: 26,
+                      backgroundColor: Colors.grey[900],
+                      child: iconFlash()
+                    ),
+                  );
+                }
+              ),
+              StreamBuilder(
+                stream: _controller.streamCameraState.stream,
+                builder: (context, snapshot) {
+                  return InkWell(
+                    onTap: () => _controller.touchesRatio(state),
+                    child: CircleAvatar(
+                      maxRadius: 26,
+                      backgroundColor: Colors.grey[900],
+                      child: textRatio()
+                    ),
+                  );
+                }
+              ),
+            ],
           ),
-          Container(
-            decoration: const BoxDecoration(color: Colors.transparent),
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-            child: Row(                  
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const CircleAvatar(
-                    maxRadius: 26,
-                    backgroundColor: Colors.transparent,
-                  ),
-                InkWell(
-                  splashColor: Colors.purple,
-                  borderRadius: const BorderRadius.all(Radius.circular(30)),
-                  onTap: () async => await _controller.clickTouchCamera(state, context),
-                  child: buttonCamera(),
+        ),
+        Container(
+          decoration: const BoxDecoration(color: Colors.transparent),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          child: Row(                  
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const CircleAvatar(
+                  maxRadius: 26,
+                  backgroundColor: Colors.transparent,
                 ),
-                StreamBuilder(
-                  stream: _controller.streamCameraState.stream,
-                  builder: (context, snapshot) {
-                    return InkWell(
-                      onTap: () => _controller.touchesSensorPosition(state),
-                      child: CircleAvatar(
-                        maxRadius: 26,
-                        backgroundColor: Colors.grey[900],
-                        child: iconSensor(),
-                      ),
-                    );
-                  }
-                ),
-              ],
-            ),
+              InkWell(
+                splashColor: Colors.purple,
+                borderRadius: const BorderRadius.all(Radius.circular(30)),
+                onTap: () async => await _controller.clickTouchCamera(state, context),
+                child: buttonCamera(),
+              ),
+              StreamBuilder(
+                stream: _controller.streamCameraState.stream,
+                builder: (context, snapshot) {
+                  return InkWell(
+                    onTap: () => _controller.touchesSensorPosition(state),
+                    child: CircleAvatar(
+                      maxRadius: 26,
+                      backgroundColor: Colors.grey[900],
+                      child: iconSensor(),
+                    ),
+                  );
+                }
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

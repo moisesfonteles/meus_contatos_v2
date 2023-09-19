@@ -7,10 +7,10 @@ import 'package:meus_contatos/controller/contact_controller.dart';
 import '../model/contac_model.dart';
 
 class ContactPage extends StatefulWidget {
-  List<Contact> contacts;
-  Contact contact;
-  int index;
-  ContactPage({super.key,required this.contacts, required this.contact, required this.index});
+  final List<Contact> contacts;
+  final Contact contact;
+  final int index;
+  const ContactPage({super.key,required this.contacts, required this.contact, required this.index});
 
   @override
   State<ContactPage> createState() => _ContactPageState();
@@ -131,60 +131,64 @@ class _ContactPageState extends State<ContactPage> {
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly, _controller.maskFormatter],
                     ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _controller.emailController,
-                      decoration: const InputDecoration(border: OutlineInputBorder(),labelText: "E-mail (Opcional)",hintText: "nome@email.com"),
-                      onEditingComplete: _controller.uploadPhotoLoading ? () {} : () async {
-                        _controller.uploadingPhoto();
-                        await _controller.clickSaveContact(widget.contact, context);
-                        _controller.uploadingPhoto();
-                      },
-                      textInputAction: TextInputAction.done,
-                      validator: (String? value) => _controller.validatorEmail(value),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: TextFormField(
+                        controller: _controller.emailController,
+                        decoration: const InputDecoration(border: OutlineInputBorder(),labelText: "E-mail (Opcional)",hintText: "nome@email.com"),
+                        onEditingComplete: _controller.uploadPhotoLoading ? () {} : () async {
+                          _controller.uploadingPhoto();
+                          await _controller.clickSaveContact(widget.contact, context);
+                          _controller.uploadingPhoto();
+                        },
+                        textInputAction: TextInputAction.done,
+                        validator: (String? value) => _controller.validatorEmail(value),
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: StreamBuilder<bool>(
-                            stream: _controller.streamUploadPhoto.stream,
-                            builder: (context, snapshot) {
-                              return ElevatedButton(
-                                style: ElevatedButton.styleFrom(fixedSize:  const Size(double.maxFinite, 60)),
-                                onPressed: _controller.uploadPhotoLoading ? () {} : () {
-                                  _controller.clickEditContact();
-                                  _controller.nameController.text = widget.contact.name as String;
-                                  _controller.phoneController.text = widget.contact.phone as String;
-                                  _controller.emailController.text = widget.contact.email as String;                         
-                                  widget.contact.profileUrl = _controller.profileUrl;
-                                  _controller.photoProfile = null;
-                                  _controller.comeBack = true;
-                                },
-                                child: const Text("Cancelar", style: TextStyle(fontSize: 16)),
-                              );
-                            }
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: StreamBuilder<bool>(
+                              stream: _controller.streamUploadPhoto.stream,
+                              builder: (context, snapshot) {
+                                return ElevatedButton(
+                                  style: ElevatedButton.styleFrom(fixedSize:  const Size(double.maxFinite, 60)),
+                                  onPressed: _controller.uploadPhotoLoading ? () {} : () {
+                                    _controller.clickEditContact();
+                                    _controller.nameController.text = widget.contact.name as String;
+                                    _controller.phoneController.text = widget.contact.phone as String;
+                                    _controller.emailController.text = widget.contact.email as String;                         
+                                    widget.contact.profileUrl = _controller.profileUrl;
+                                    _controller.photoProfile = null;
+                                    _controller.comeBack = true;
+                                  },
+                                  child: const Text("Cancelar", style: TextStyle(fontSize: 16)),
+                                );
+                              }
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: StreamBuilder<bool>(
-                            stream: _controller.streamUploadPhoto.stream,
-                            builder: (context, snapshot) {
-                              return ElevatedButton(
-                                style: ElevatedButton.styleFrom(fixedSize:  const Size(double.maxFinite, 60)),
-                                onPressed: _controller.uploadPhotoLoading ? () {} : () async {
-                                  _controller.uploadingPhoto();
-                                  await _controller.clickSaveContact(widget.contact, context);
-                                  _controller.uploadingPhoto();
-                                },
-                                child: _controller.uploadPhotoLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Salvar", style: TextStyle(fontSize: 16)),
-                              );
-                            }
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: StreamBuilder<bool>(
+                              stream: _controller.streamUploadPhoto.stream,
+                              builder: (context, snapshot) {
+                                return ElevatedButton(
+                                  style: ElevatedButton.styleFrom(fixedSize:  const Size(double.maxFinite, 60)),
+                                  onPressed: _controller.uploadPhotoLoading ? () {} : () async {
+                                    _controller.uploadingPhoto();
+                                    await _controller.clickSaveContact(widget.contact, context);
+                                    _controller.uploadingPhoto();
+                                  },
+                                  child: _controller.uploadPhotoLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Salvar", style: TextStyle(fontSize: 16)),
+                                );
+                              }
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   } else ...{
                     if(widget.contact.profileUrl == null && _controller.photoProfile == null) ...{
@@ -211,12 +215,12 @@ class _ContactPageState extends State<ContactPage> {
                       ),
                     },
                     const SizedBox(height: 16.0),
-                    Text(widget.contact.name as String, textAlign: TextAlign.center, style: const TextStyle(fontSize: 25)),
+                    Text("${widget.contact.name}", textAlign: TextAlign.center, style: const TextStyle(fontSize: 25)),
                     const SizedBox(height: 12.0),
-                    Text(widget.contact.phone as String, style: const TextStyle(fontSize: 19)),
+                    Text("${widget.contact.phone}", style: const TextStyle(fontSize: 19)),
                     if(widget.contact.email!.isNotEmpty) ...{
                       const SizedBox(height: 12.0),
-                      Text(widget.contact.email as String, textAlign: TextAlign.center, style: const TextStyle(fontSize: 19)),
+                      Text("${widget.contact.email}", textAlign: TextAlign.center, style: const TextStyle(fontSize: 19)),
                     },
                     const SizedBox(height: 20.0),
                     Container(
@@ -225,61 +229,61 @@ class _ContactPageState extends State<ContactPage> {
                       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       color: Colors.grey.shade200,
                     ),
-                    // const SizedBox(height: 20.0,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () => _controller.callPhone(widget.contact.phone as String),
-                          child: const CircleAvatar(backgroundColor: Colors.green,child: Icon(Icons.phone, color: Colors.white)),
-                        ),
-                        const SizedBox(width: 16.0),
-                        InkWell(
-                          onTap:() => _controller.sendSms(widget.contact.phone as String),
-                          child: const CircleAvatar(backgroundColor: Colors.blue,child: Icon(Icons.message, color: Colors.white)),
-                        ),
-                        if(widget.contact.email!.isNotEmpty) ...{
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () => _controller.callPhone(widget.contact.phone as String),
+                            child: const CircleAvatar(backgroundColor: Colors.green,child: Icon(Icons.phone, color: Colors.white)),
+                          ),
                           const SizedBox(width: 16.0),
                           InkWell(
-                            onTap: () => _controller.sendEmail(widget.contact.email as String),
-                            child: CircleAvatar(backgroundColor: Colors.pink[300],child: const Icon(Icons.email, color: Colors.white)),
+                            onTap:() => _controller.sendSms(widget.contact.phone as String),
+                            child: const CircleAvatar(backgroundColor: Colors.blue,child: Icon(Icons.message, color: Colors.white)),
                           ),
-                        },
-                        const SizedBox(width: 16.0),
-                        InkWell(
-                          onTap:() {
-                            _controller.clickEditContact();
-                          },
-                          child: const CircleAvatar(backgroundColor: Colors.orange,child: Icon(Icons.edit, color: Colors.white)),
-                        ),
-                        const SizedBox(width: 16.0),
-                        InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text("Excluir este contato?"),
-                                content: const Text("Você tem certeza que deseja excluir este contato?"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    }, 
-                                    style: TextButton.styleFrom(foregroundColor: Colors.purple[700]),
-                                    child: const Text("Cancelar"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => _controller.deleteContact(_controller.index, context, widget.contact),
-                                    style: TextButton.styleFrom(foregroundColor: Colors.purple[700]),
-                                    child: const Text("Excluir"),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          child: const CircleAvatar(backgroundColor: Colors.red,child: Icon(Icons.delete, color: Colors.white)),
-                        ),
-                      ],
+                          const SizedBox(width: 16.0),
+                          InkWell(
+                            onTap: widget.contact.email!.isNotEmpty ? () => _controller.sendEmail(widget.contact.email as String) : null,
+                            child: widget.contact.email!.isNotEmpty ? CircleAvatar(backgroundColor: Colors.pink[300],child: const Icon(Icons.email, color: Colors.white)) : CircleAvatar(backgroundColor: Colors.grey[200],child: const Icon(Icons.email, color: Colors.white)),
+                          ),
+                          const SizedBox(width: 16.0),
+                          InkWell(
+                            onTap:() {
+                              _controller.clickEditContact();
+                            },
+                            child: const CircleAvatar(backgroundColor: Colors.orange,child: Icon(Icons.edit, color: Colors.white)),
+                          ),
+                          const SizedBox(width: 16.0),
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text("Excluir este contato?"),
+                                  content: const Text("Você tem certeza que deseja excluir este contato?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      }, 
+                                      style: TextButton.styleFrom(foregroundColor: Colors.purple[700]),
+                                      child: const Text("Cancelar"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => _controller.deleteContact(_controller.index, context, widget.contact),
+                                      style: TextButton.styleFrom(foregroundColor: Colors.purple[700]),
+                                      child: const Text("Excluir"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: const CircleAvatar(backgroundColor: Colors.red,child: Icon(Icons.delete, color: Colors.white)),
+                          ),
+                        ],
+                      ),
                     ),
                   },
                 ],
@@ -308,10 +312,7 @@ class _ContactPageState extends State<ContactPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               InkWell(
-                onTap: () async{
-                  await _controller.captureImageCamera(context);
-                  Navigator.pop(context);
-                },
+                onTap: () async => await _controller.captureImageCamera(context),
                 child: Column(
                   children: const [
                     Icon(Icons.camera_alt, color: Colors.white),
@@ -321,9 +322,7 @@ class _ContactPageState extends State<ContactPage> {
                 ),
               ),
               InkWell(
-                onTap: () async{
-                  await _controller.takeImageGallery(context);
-                },
+                onTap: () async => await _controller.takeImageGallery(context),
                 child: Column(
                   children: const [
                     Icon(Icons.photo, color: Colors.white),
