@@ -83,7 +83,22 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
         const SizedBox(height: 20),
         SizedBox(
           height: 200,
-          child: mapAddressContact(),
+          child: Stack(
+            children: [
+              mapAddressContact(),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MapContactJson(otherContact: widget.otherContact, index: widget.index,)));
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    Icon(Icons.fullscreen, color: Colors.black87, size: 34),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 20),
         Text("${widget.otherContact.address?.suite}, ${widget.otherContact.address?.street}, ${widget.otherContact.address?.city}" , style: const TextStyle(fontSize: 19), textAlign: TextAlign.center), 
@@ -113,17 +128,6 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
               builder: (context) => Image.asset("assets/pin.png"),
             ),
           ],
-        ),
-        InkWell(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MapContactJson(otherContact: widget.otherContact, index: widget.index,)));
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
-              Icon(Icons.fullscreen, color: Colors.black87, size: 34),
-            ],
-          ),
         ),
       ],
     );
