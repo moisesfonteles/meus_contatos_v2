@@ -44,7 +44,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
             backgroundColor: Colors.grey[100],
             appBar: appBarMyContacts(snapshot.data!),
             body: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -1,15 +1,17 @@
 
 
 class OtherContact {
+  int? id;
   String? name;
   String? phone;
   String? email;
   Address? address;
 
-  OtherContact({this.name, this.phone, this.email, this.address});
+  OtherContact({this.id, this.name, this.phone, this.email, this.address});
 
   factory OtherContact.fromJson(Map contact) {
     return OtherContact(
+      id: contact["id"],
       name: contact["name"],
       phone: contact["phone"],
       email: contact["email"],
@@ -19,6 +21,7 @@ class OtherContact {
 }
 
 class Address{
+  int? contactId;
   String? street;
   String? suite;
   String? city;

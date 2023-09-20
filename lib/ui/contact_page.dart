@@ -206,7 +206,7 @@ class _ContactPageState extends State<ContactPage> {
                           builder: (context, snapshot) {
                             return CircleAvatar(
                               backgroundColor: Colors.purple,
-                              foregroundImage: (_controller.photoProfile != null ?  FileImage(_controller.photoProfile!) : NetworkImage(widget.contact.profileUrl as String) as ImageProvider<Object>),
+                              foregroundImage: (_controller.photoProfile != null ?  FileImage(_controller.photoProfile!) : NetworkImage("${widget.contact.profileUrl}") as ImageProvider<Object>),
                               maxRadius: 50,
                               child: const CircularProgressIndicator(color: Colors.white),
                             );
@@ -235,17 +235,17 @@ class _ContactPageState extends State<ContactPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: () => _controller.callPhone(widget.contact.phone as String),
+                            onTap: () => _controller.callPhone("${widget.contact.phone}"),
                             child: const CircleAvatar(backgroundColor: Colors.green,child: Icon(Icons.phone, color: Colors.white)),
                           ),
                           const SizedBox(width: 16.0),
                           InkWell(
-                            onTap:() => _controller.sendSms(widget.contact.phone as String),
+                            onTap:() => _controller.sendSms("${widget.contact.phone}"),
                             child: const CircleAvatar(backgroundColor: Colors.blue,child: Icon(Icons.message, color: Colors.white)),
                           ),
                           const SizedBox(width: 16.0),
                           InkWell(
-                            onTap: widget.contact.email!.isNotEmpty ? () => _controller.sendEmail(widget.contact.email as String) : null,
+                            onTap: widget.contact.email!.isNotEmpty ? () => _controller.sendEmail("${widget.contact.email}") : null,
                             child: widget.contact.email!.isNotEmpty ? CircleAvatar(backgroundColor: Colors.pink[300],child: const Icon(Icons.email, color: Colors.white)) : CircleAvatar(backgroundColor: Colors.grey[200],child: const Icon(Icons.email, color: Colors.white)),
                           ),
                           const SizedBox(width: 16.0),

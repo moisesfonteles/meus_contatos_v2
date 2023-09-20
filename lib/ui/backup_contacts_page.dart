@@ -30,10 +30,10 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
         return Scaffold(
           appBar: appBarOtherContacts(),
           body: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: snapshot.data! ? downloadContactsFinished() : downloadContactsPending(),
           ),
-          floatingActionButton: snapshot.data == true ? null : floatActionButton(snapshot.data!),
+          floatingActionButton: floatActionButton(snapshot.data!),
         );
       }
     );
@@ -120,7 +120,7 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
     return FloatingActionButton(
       backgroundColor: Colors.purple,
       onPressed: () => _controller.consumeDataJson(),
-      child: downloadFinished == true ? const Icon(Icons.check) : const Icon(Icons.cloud_download),
+      child: const Icon(Icons.cloud_download),
     );
   }
 

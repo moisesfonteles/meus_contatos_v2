@@ -65,19 +65,29 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              onTap: () => _controller.callPhone(widget.otherContact.phone as String),
+              onTap: () => _controller.callPhone("${widget.otherContact.phone}"),
               child: const CircleAvatar(backgroundColor: Colors.green,child: Icon(Icons.phone, color: Colors.white)),
             ),
             const SizedBox(width: 16.0),
             InkWell(
-              onTap:() => _controller.sendSms(widget.otherContact.phone as String),
+              onTap:() => _controller.sendSms("${widget.otherContact.phone}"),
               child: const CircleAvatar(backgroundColor: Colors.blue,child: Icon(Icons.message, color: Colors.white)),
             ),
             const SizedBox(width: 16.0),
             InkWell(
-              onTap: () => _controller.sendEmail(widget.otherContact.email as String),
+              onTap: () => _controller.sendEmail("${widget.otherContact.email}"),
               child: CircleAvatar(backgroundColor: Colors.pink[300],child: const Icon(Icons.email, color: Colors.white)),
             ),
+            // const SizedBox(width: 16.0),
+            // InkWell(
+            //   onTap: () {},
+            //   child: const CircleAvatar(backgroundColor: Colors.orange,child: Icon(Icons.edit, color: Colors.white)),
+            // ),
+            // const SizedBox(width: 16.0),
+            // InkWell(
+            //   onTap: () {},
+            //   child: const CircleAvatar(backgroundColor: Colors.red,child: Icon(Icons.delete, color: Colors.white)),
+            // ),
           ],
         ),
         const SizedBox(height: 20),
@@ -86,15 +96,14 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
           child: Stack(
             children: [
               mapAddressContact(),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MapContactJson(otherContact: widget.otherContact, index: widget.index,)));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Icon(Icons.fullscreen, color: Colors.black87, size: 34),
-                  ],
+              Positioned(
+                top: 0,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MapContactJson(otherContact: widget.otherContact, index: widget.index,)));
+                  },
+                  child: const Icon(Icons.fullscreen, color: Colors.black87, size: 34),
                 ),
               ),
             ],

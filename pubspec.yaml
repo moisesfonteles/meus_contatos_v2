@@ -29,6 +29,7 @@ dependencies:
   latlong2: ^0.8.2
   http: ^0.13.6
   sqflite: ^2.2.8+4
+  path: ^1.8.2
   
 
 dev_dependencies:
