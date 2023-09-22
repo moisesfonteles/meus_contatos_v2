@@ -106,7 +106,8 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
                         child: TextFormField(
                           controller: _controller.addressController,
                           decoration: const InputDecoration(border: OutlineInputBorder(),labelText: "Endereço"),
-                          textInputAction: TextInputAction.next,
+                          onEditingComplete: () => _controller.clickSaveContact(widget.otherContact),
+                          textInputAction: TextInputAction.done,
                           // validator: ,
                         ),
                       ),
