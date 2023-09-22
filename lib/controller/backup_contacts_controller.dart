@@ -1,6 +1,5 @@
 
 import 'dart:async';
-import 'dart:developer';
 import 'package:http/http.dart';
 import 'package:meus_contatos/database/db.dart';
 import 'dart:convert';
@@ -44,23 +43,28 @@ class BackupContactsController {
       };
       newListDB.add(contact);
     }
-    log("Lista nova: $newListDB");
+    newListDB.sort((a, b) => a["name"]!.compareTo(b["name"]!));
     return newListDB;
   }
 
   Future<void> loadingDatabase() async{
     List<OtherContact> listDB = (await getTheContacts()).map((e) => OtherContact.fromJson(e)).toList();
     behaviorListOtherContacts.sink.add(listDB);
-    streamDownloadFinished.sink.add(true);
+    if(listDB.isNotEmpty){
+      streamDownloadFinished.sink.add(true);
+    } else {
+      streamDownloadFinished.sink.add(false);
+    }
+    
   }
 
   Future<void> consumeDataJson() async {
     final future = await get(uri);
     listJson = (jsonDecode(future.body) as List).map((e) => OtherContact.fromJson(e)).toList();
     await insertTheContacts(listJson);
+    listJson.sort((a, b) => a.name!.compareTo(b.name!));
     behaviorListOtherContacts.sink.add(listJson);
     streamDownloadFinished.sink.add(true);
-
   }
 
   Future<void> insertTheContacts(List<OtherContact> contactJson) async{
@@ -85,7 +89,6 @@ class BackupContactsController {
       await db.rawInsert(
           "INSERT INTO geo (lat, lng, contact_id) VALUES ('${contactJson[i].address!.geo!.lat}', '${contactJson[i].address!.geo!.lng}', '${contactJson[i].id}')"
       );
-        
     }
   }
 }

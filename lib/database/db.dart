@@ -43,6 +43,8 @@ class DB {
     return "CREATE TABLE IF NOT EXISTS geo (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, lat TEXT, lng TEXT, contact_id INTEGER);";
   }
 
+
+
   Future<void> insertTheContacts(Database db) async{
     await db.rawInsert(
       "INSERT INTO contact(name, phone, email, contact_id) VALUES('Moisés Fonteles', '+55 (85) 9 9256-3380', 'moisesfonteles18@gmail.com', '2');"
@@ -55,12 +57,22 @@ class DB {
     return list;
   }
 
-  Future<void> updateTheContacts(Database db) async{
-    await db.rawUpdate("UPDATE contact SET name = 'Italo Moreira' WHERE id = 1;");
+  Future<void> updateTheContacts(Database db, String name, String phone, String email, String suite, String street, String city, String lat, String lng, int index) async{
+    await db.rawUpdate(
+      "UPDATE contact SET name = '$name', phone = '$phone', email = '$email' WHERE id = '$index';"
+    );
+    await db.rawUpdate(
+      "UPDATE address SET suite = '$suite', street = '$street', city = '$city' WHERE id = '$index';"
+    );
+    await db.rawUpdate(
+      "UPDATE geo SET lat = '$lat', lng = '$lng' WHERE id = '$index';"
+    );
   }
 
-  Future<void> deleteTheContact(Database db) async{
-    await db.rawDelete("DELETE FROM contact;");
+  Future<void> deleteTheContact(Database db, int index) async{
+    await db.rawDelete("DELETE FROM contact WHERE id = '$index';");
+    await db.rawDelete("DELETE FROM address WHERE id = '$index';");
+    await db.rawDelete("DELETE FROM geo WHERE id = '$index';");
   }
 
 }

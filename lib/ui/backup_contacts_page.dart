@@ -1,4 +1,6 @@
 
+
+
 import 'package:flutter/material.dart';
 import 'package:meus_contatos/model/other_contacts_model.dart';
 
@@ -44,13 +46,19 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
 
   AppBar appBarOtherContacts() {
     return AppBar(
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Baixar backup"),
-          const SizedBox(height: 2.0,),
-          _controller.listJson.isEmpty ?  const SizedBox(height: 2.0) : Text("${_controller.listJson.length} contatos registrados ", style: const TextStyle(fontSize: 14))
-        ],
+      title: StreamBuilder<List<OtherContact>>(
+        stream: _controller.behaviorListOtherContacts.stream,
+        initialData: const [],
+        builder: (context, snapshot) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Baixar backup"),
+              const SizedBox(height: 2.0,),
+              snapshot.data!.isEmpty ?  const SizedBox(height: 2.0) : Text("${snapshot.data!.length} contatos", style: const TextStyle(fontSize: 14))
+            ],
+          );
+        }
       ),
     );
   }
@@ -74,8 +82,12 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10),
       child: InkWell(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ContactJsonPage(otherContacts: contactJson, otherContact: otherContact, index: index)));
+        onTap: () async{
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ContactJsonPage(otherContacts: contactJson, otherContact: otherContact, index: index))
+          );
+          _controller.loadingDatabase();
         },
         child: Container(
           margin: const EdgeInsets.all(6.0),
@@ -104,17 +116,17 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
 
   Widget downloadContactsFinished() {
     return Center(
-      child: StreamBuilder<List<OtherContact>>(
+      child: StreamBuilder<List<OtherContact>>( 
         stream: _controller.behaviorListOtherContacts.stream,
         builder: (context, snapshot) {
           if(snapshot.data == null) {
-            return const CircularProgressIndicator(color: Colors.purple);
+            return const CircularProgressIndicator();
           }
           return ListView.separated(
             itemBuilder: (BuildContext context, int index) {
               return cardContactJson(snapshot.data!, index, snapshot.data![index]);
             }, 
-            separatorBuilder: (context, index) => Container(height: 2,width: double.infinity,color: Colors.grey.shade200),
+            separatorBuilder: (context, index) => Container(margin: const EdgeInsets.only(left: 10, right: 10), height: 2,width: double.infinity,color: Colors.grey.shade200),
             itemCount: snapshot.data!.length,
           );
         }

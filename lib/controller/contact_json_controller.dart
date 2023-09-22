@@ -1,7 +1,83 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:meus_contatos/extension/extension.dart';
+import 'package:meus_contatos/model/other_contacts_model.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../database/db.dart';
 
 
 class ContactJsonController {
+  final formKey = GlobalKey<FormState>();
+  bool editingContact = false;
+  StreamController<bool> streamEditingContact = StreamController<bool>.broadcast();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController latController = TextEditingController();
+  TextEditingController lngController = TextEditingController();
+
+  void disposeStream(){
+    streamEditingContact.close();
+  }
+
+  void clickEditContact(){
+    editingContact = !editingContact;
+    streamEditingContact.sink.add(editingContact);
+  }
+
+  String? validatorName(String? value){
+    value = value?.trim();
+    if(value == null || value.isEmpty){
+      return "Nome obrigatório";
+    }
+    return null;
+  }
+
+  String? validatorPhone(String? value){
+    value = value?.trim();
+    if(value == null || value.isEmpty){
+      return "Telefone obrigatório";
+    }
+    return null;
+  }
+
+  String? validatorEmail(String? value){
+    if(value!.isNotEmpty){
+      if(value.contains("@") && (value.contains("."))){
+        return null;
+      } else{
+        return "email inválido";
+      }
+    } else{
+      return null;
+    }
+  }
+
+  void clickSaveContact(OtherContact otherContact) async{
+    Database db = await DB.instance.database();
+    if(formKey.currentState?.validate() ?? false) {
+      otherContact.name = nameController.text.capitalizeWords();
+      otherContact.phone = phoneController.text;
+      otherContact.email = emailController.text;
+      otherContact.address!.suite = addressController.text;
+      otherContact.address!.street = "";
+      otherContact.address!.city = "";
+      DB.instance.updateTheContacts(db, otherContact.name!, otherContact.phone!, otherContact.email!, otherContact.address!.suite!, otherContact.address!.street!, otherContact.address!.city!, otherContact.address!.geo!.lat!, otherContact.address!.geo!.lng!, otherContact.id!);
+    }
+    clickEditContact();
+  }
+
+  Future<void> deleteContact(int index, BuildContext context, OtherContact otherContact) async{
+    NavigatorState navigator = Navigator.of(context);
+    Database db = await DB.instance.database();
+    navigator.pop();
+    navigator.pop();
+    DB.instance.deleteTheContact(db, otherContact.id!);
+  }
   
   void callPhone(String phone) async{
     String telephoneNumber = phone.replaceAll(" ", "");

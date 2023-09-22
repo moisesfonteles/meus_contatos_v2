@@ -21,10 +21,10 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   void initState() {
-    _controller.nameController.text = widget.contact.name as String;
+    _controller.nameController.text = widget.contact.name!;
     _controller.contacts = widget.contacts;
-    _controller.phoneController.text = widget.contact.phone as String;
-    _controller.emailController.text = widget.contact.email as String;
+    _controller.phoneController.text = widget.contact.phone!;
+    _controller.emailController.text = widget.contact.email!;
     _controller.profileUrl = widget.contact.profileUrl;
     _controller.index = widget.index;
     super.initState();
@@ -56,7 +56,7 @@ class _ContactPageState extends State<ContactPage> {
     return Form(
       key: _controller.formKey,
       child: StreamBuilder<bool>(
-        stream: _controller.streamEditContact.stream,
+        stream: _controller.streamEditingContact.stream,
         initialData: false,
         builder: (context, snapshot) {
           return ListView(

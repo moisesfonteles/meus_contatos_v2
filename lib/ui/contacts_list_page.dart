@@ -97,6 +97,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
               leading: const Icon(Icons.cloud_download, color: Colors.purple),
               title: const Text("Baixar backup", style: TextStyle(color: Colors.purple, fontSize: 20)),
               onTap: () {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>  const BackupContactsPage()),
@@ -113,7 +114,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
       child: ListView.separated(
         shrinkWrap: true,
         itemCount: contacts.length,
-        separatorBuilder: (context, index) => Container(height: 2,width: double.infinity,color: Colors.grey.shade200),
+        separatorBuilder: (context, index) => Container(margin: const EdgeInsets.only(left: 10, right: 10), height: 2,width: double.infinity,color: Colors.grey.shade200),
         itemBuilder: (BuildContext context, int index ) {
           return cardContact(contacts[index], index, contacts);
         }

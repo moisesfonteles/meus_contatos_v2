@@ -25,7 +25,7 @@ class ContactController{
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  StreamController<bool> streamEditContact = StreamController.broadcast();
+  StreamController<bool> streamEditingContact = StreamController.broadcast();
   StreamController<bool> streamUploadPhoto = StreamController.broadcast();
   StreamController<File?> streamPhotoProfile = StreamController.broadcast();
   int index = 0;
@@ -37,7 +37,7 @@ class ContactController{
   bool removedImage = false;
 
   void disposeStream(){
-    streamEditContact.close();
+    streamEditingContact.close();
     streamUploadPhoto.close();
     streamPhotoProfile.close();
   }
@@ -45,10 +45,10 @@ class ContactController{
   void clickEditContact(){
     if(editingContact){
       editingContact = false;
-      streamEditContact.sink.add(editingContact);
+      streamEditingContact.sink.add(editingContact);
     } else{
       editingContact = true;
-      streamEditContact.sink.add(editingContact);
+      streamEditingContact.sink.add(editingContact);
     }
   }
   
@@ -117,7 +117,7 @@ class ContactController{
       contact.photoProfile = photoProfile;
       contacts.sort((a, b) => a.name!.compareTo(b.name!));
       editingContact = false;
-      streamEditContact.sink.add(editingContact);
+      streamEditingContact.sink.add(editingContact);
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       firestore.collection("Contato").doc(contact.uid).update({
         "nome": nameController.text.trim().capitalizeWords(), "telefone": phoneController.text, "email": emailController.text.toLowerCase(), "fotoUrl": profileUrl
