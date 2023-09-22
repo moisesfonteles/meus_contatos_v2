@@ -43,22 +43,18 @@ class _ContactsListPageState extends State<ContactsListPage> {
             drawer: drawerMyContacts(snapshot.data!),
             backgroundColor: Colors.grey[100],
             appBar: appBarMyContacts(snapshot.data!),
-            body: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(!_controller.loadingFirestoreEnd) ...{
-                        const CircularProgressIndicator(),
-                    } else if(snapshot.data!.isEmpty && _controller.loadingFirestoreEnd)...{
-                      contactListIsEmpty(),
-                    } else ...{
-                      contactsList(snapshot.data!),
-                    }
-                  ],
-                ),
-              ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: double.maxFinite),
+                if(!_controller.loadingFirestoreEnd) ...{
+                    const CircularProgressIndicator(),
+                } else if(snapshot.data!.isEmpty && _controller.loadingFirestoreEnd)...{
+                  contactListIsEmpty(),
+                } else ...{
+                  contactsList(snapshot.data!),
+                }
+              ],
             ),
             floatingActionButton: buttonAddContact(snapshot.data!),
           ),
@@ -129,6 +125,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset("assets/sapo.png", width: 200, height: 200),
           const Text("Oops!", textAlign: TextAlign.center, style: TextStyle(fontSize: 25)),
@@ -142,77 +139,80 @@ class _ContactsListPageState extends State<ContactsListPage> {
   }
 
   Widget cardContact(Contact contact, int index, List<Contact> contacts){
-    return InkWell(
-      onLongPress: _controller.longPress ? () {} : () => _controller.onLongPress(contacts, contact),
-      onTap: _controller.longPress ? () => _controller.selectContact(contact, contacts) : () async{
-        await Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context) => ContactPage(contacts: contacts, contact: contact, index: index))
-          );
-          _controller.listUptade(contacts);
-      },
-      child: Slidable(
-        key: UniqueKey(),
-        closeOnScroll: true,
-        endActionPane: _controller.longPress ? null : ActionPane(
-          extentRatio: 0.4,
-          motion: const DrawerMotion(), 
-          children: [
-            SlidableAction(
-              onPressed:(context) {
-                _controller.callPhone(contact.phone!);
-              },
-              borderRadius: BorderRadius.circular(20),
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.green,
-              icon: Icons.phone,
-            ),
-            SlidableAction(
-              onPressed:(context) {
-                _controller.sendSms(contact.phone!);
-              },
-              borderRadius: BorderRadius.circular(20),
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.blue,
-              icon: Icons.message,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(color: contact.isSelected ? Colors.purple[50] : null, borderRadius: const BorderRadius.all(Radius.circular(10))),
-              margin: const EdgeInsets.all(6.0),
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                children: [
-                  if(contact.profileUrl == null) ...{
-                    contact.isSelected ? CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.check, color: Colors.purple[100],)) :
-                    const CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.person)),
-                    const SizedBox(width: 2.0),
-                  } else ...{
-                    contact.isSelected ? CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.check, color: Colors.purple[100],)) :
-                    CircleAvatar(
-                      backgroundColor: Colors.purple, 
-                      foregroundImage: NetworkImage(contact.profileUrl as String),
-                      child: const CircleAvatar(backgroundColor: Colors.purple ,maxRadius: 8, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 1.0))),
-                      const SizedBox(width: 2.0),
-                  },            
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('${contact.name}', style: const TextStyle(color: Colors.black, fontSize: 20), overflow: TextOverflow.ellipsis, maxLines: 1),
-                        const SizedBox(height: 2.0),
-                        Text('${contact.phone}', style: const TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                ],
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10),
+      child: InkWell(
+        onLongPress: _controller.longPress ? () {} : () => _controller.onLongPress(contacts, contact),
+        onTap: _controller.longPress ? () => _controller.selectContact(contact, contacts) : () async{
+          await Navigator.push(
+            context, 
+            MaterialPageRoute(builder: (context) => ContactPage(contacts: contacts, contact: contact, index: index))
+            );
+            _controller.listUptade(contacts);
+        },
+        child: Slidable(
+          key: UniqueKey(),
+          closeOnScroll: true,
+          endActionPane: _controller.longPress ? null : ActionPane(
+            extentRatio: 0.4,
+            motion: const DrawerMotion(), 
+            children: [
+              SlidableAction(
+                onPressed:(context) {
+                  _controller.callPhone(contact.phone!);
+                },
+                borderRadius: BorderRadius.circular(20),
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.green,
+                icon: Icons.phone,
               ),
-            ),
-          ],
+              SlidableAction(
+                onPressed:(context) {
+                  _controller.sendSms(contact.phone!);
+                },
+                borderRadius: BorderRadius.circular(20),
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.blue,
+                icon: Icons.message,
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(color: contact.isSelected ? Colors.purple[50] : null, borderRadius: const BorderRadius.all(Radius.circular(10))),
+                margin: const EdgeInsets.all(6.0),
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  children: [
+                    if(contact.profileUrl == null) ...{
+                      contact.isSelected ? CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.check, color: Colors.purple[100],)) :
+                      const CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.person)),
+                      const SizedBox(width: 2.0),
+                    } else ...{
+                      contact.isSelected ? CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.check, color: Colors.purple[100],)) :
+                      CircleAvatar(
+                        backgroundColor: Colors.purple, 
+                        foregroundImage: NetworkImage(contact.profileUrl as String),
+                        child: const CircleAvatar(backgroundColor: Colors.purple ,maxRadius: 8, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 1.0))),
+                        const SizedBox(width: 2.0),
+                    },            
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${contact.name}', style: const TextStyle(color: Colors.black, fontSize: 20), overflow: TextOverflow.ellipsis, maxLines: 1),
+                          const SizedBox(height: 2.0),
+                          Text('${contact.phone}', style: const TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

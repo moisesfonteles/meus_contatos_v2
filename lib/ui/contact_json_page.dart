@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -28,11 +26,8 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
       appBar: AppBar(
         title: Text(widget.otherContact.name!),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: profileContactJson(),
-        ),
+      body: Center(
+        child: profileContactJson(),
       ),
     );
   }
@@ -40,11 +35,14 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
   Widget profileContactJson() {
     return ListView(
       children: [
-        Center(
-          child: CircleAvatar(
-            maxRadius: 55,
-            backgroundColor: Colors.grey[100],
-            child: const CircleAvatar(backgroundColor: Colors.purple, maxRadius: 50, child: Icon(Icons.person, size: 70))
+        Container(
+          margin: const EdgeInsets.all(10),
+          child: Center(
+            child: CircleAvatar(
+              maxRadius: 55,
+              backgroundColor: Colors.grey[100],
+              child: const CircleAvatar(backgroundColor: Colors.purple, maxRadius: 50, child: Icon(Icons.person, size: 70))
+            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -91,22 +89,25 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
           ],
         ),
         const SizedBox(height: 20),
-        SizedBox(
-          height: 200,
-          child: Stack(
-            children: [
-              mapAddressContact(),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MapContactJson(otherContact: widget.otherContact, index: widget.index,)));
-                  },
-                  child: const Icon(Icons.fullscreen, color: Colors.black87, size: 34),
+        Container(
+          margin: const EdgeInsets.only(left: 10, right: 10),
+          child: SizedBox(
+            height: 200,
+            child: Stack(
+              children: [
+                mapAddressContact(),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MapContactJson(otherContact: widget.otherContact, index: widget.index,)));
+                    },
+                    child: const Icon(Icons.fullscreen, color: Colors.black87, size: 34),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 20),

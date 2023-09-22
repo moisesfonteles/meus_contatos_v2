@@ -16,6 +16,12 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
   final BackupContactsController _controller = BackupContactsController();
 
   @override
+  void initState() {
+    _controller.loadingDatabase();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _controller.disposeStream();
     super.dispose();
@@ -29,10 +35,7 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
       builder: (context, snapshot) {
         return Scaffold(
           appBar: appBarOtherContacts(),
-          body: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: snapshot.data! ? downloadContactsFinished() : downloadContactsPending(),
-          ),
+          body: snapshot.data! ? downloadContactsFinished() : downloadContactsPending(),
           floatingActionButton: floatActionButton(snapshot.data!),
         );
       }
@@ -68,29 +71,32 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
   }
 
   Widget cardContactJson(List<OtherContact> contactJson, int index, OtherContact otherContact) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ContactJsonPage(otherContacts: contactJson, otherContact: otherContact, index: index)));
-      },
-      child: Container(
-        margin: const EdgeInsets.all(6.0),
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-            const CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.person)),
-            const SizedBox(width: 2.0),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('${otherContact.name}', style: const TextStyle(color: Colors.black, fontSize: 20), overflow: TextOverflow.ellipsis, maxLines: 1),
-                  const SizedBox(height: 2.0),
-                  Text('${otherContact.phone}', style: const TextStyle(color: Colors.black)),
-                ],
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ContactJsonPage(otherContacts: contactJson, otherContact: otherContact, index: index)));
+        },
+        child: Container(
+          margin: const EdgeInsets.all(6.0),
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              const CircleAvatar(backgroundColor: Colors.purple, child: Icon(Icons.person)),
+              const SizedBox(width: 2.0),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${otherContact.name}', style: const TextStyle(color: Colors.black, fontSize: 20), overflow: TextOverflow.ellipsis, maxLines: 1),
+                    const SizedBox(height: 2.0),
+                    Text('${otherContact.phone}', style: const TextStyle(color: Colors.black)),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

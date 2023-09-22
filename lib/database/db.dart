@@ -1,6 +1,5 @@
 
 import 'dart:developer';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -27,7 +26,8 @@ class DB {
   _onCreate(Database db, int version) async{
     await Future.wait([
       db.execute(_contact),
-      db.execute(_address)
+      db.execute(_address),
+      db.execute(_geo)
     ]);
   }
 
@@ -36,26 +36,30 @@ class DB {
   }
 
   String get _address {
-    return "CREATE TABLE IF NOT EXISTS address (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, suite TEXT, street TEXT, city TEXT, latitude TEXT, longitude TEXT, contact_id INTEGER);";
+    return "CREATE TABLE IF NOT EXISTS address (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, suite TEXT, street TEXT, city TEXT, contact_id INTEGER);";
   }
 
-  Future<void> insertTheContacts(Database db) async{ // Insere dados no banco
+  String get _geo {
+    return "CREATE TABLE IF NOT EXISTS geo (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, lat TEXT, lng TEXT, contact_id INTEGER);";
+  }
+
+  Future<void> insertTheContacts(Database db) async{
     await db.rawInsert(
       "INSERT INTO contact(name, phone, email, contact_id) VALUES('Moisés Fonteles', '+55 (85) 9 9256-3380', 'moisesfonteles18@gmail.com', '2');"
     );
   }
 
-  Future<List<Map>> getTheContacts(Database db) async{ // printa dados do banco
+  Future<List<Map>> getTheContacts(Database db) async{
     List<Map> list = await db.rawQuery("SELECT * FROM contact");
     log("$list");
     return list;
   }
 
-  Future<void> updateTheContacts(Database db) async{ // Altera dados no banco
+  Future<void> updateTheContacts(Database db) async{
     await db.rawUpdate("UPDATE contact SET name = 'Italo Moreira' WHERE id = 1;");
   }
 
-  Future<void> deleteTheContact(Database db) async{ // Exclui dados do banco
+  Future<void> deleteTheContact(Database db) async{
     await db.rawDelete("DELETE FROM contact;");
   }
 

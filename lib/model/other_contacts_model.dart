@@ -6,7 +6,7 @@ class OtherContact {
   String? phone;
   String? email;
   Address? address;
-
+  
   OtherContact({this.id, this.name, this.phone, this.email, this.address});
 
   factory OtherContact.fromJson(Map contact) {
@@ -27,7 +27,7 @@ class Address{
   String? city;
   Geo? geo;
 
-  Address({this.street, this.suite, this.city, this.geo});
+  Address({this.contactId,this.street, this.suite, this.city, this.geo});
 
   factory Address.fromJson(Map address) {
     return Address(
@@ -40,10 +40,11 @@ class Address{
 }
 
 class Geo {
+  int? addressID;
   String? lat;
   String? lng;
 
-  Geo({this.lat, this.lng});
+  Geo({this.addressID, this.lat, this.lng});
 
   factory Geo.fromJson(Map geo) {
     return Geo(
@@ -52,3 +53,4 @@ class Geo {
     );
   }
 }
+
