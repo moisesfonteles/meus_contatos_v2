@@ -1,17 +1,25 @@
+import 'package:objectbox/objectbox.dart';
 
-
+@Entity()
 class OtherContact {
-  int? id;
+  @Id()
+  int id = 0;
+
   String? name;
   String? phone;
   String? email;
   Address? address;
   
-  OtherContact({this.id, this.name, this.phone, this.email, this.address});
+  @Property(type: PropertyType.date)
+  DateTime? date;
+
+  @Transient()
+  int? computedProperty;
+
+  OtherContact({this.name, this.phone, this.email, this.address});
 
   factory OtherContact.fromJson(Map contact) {
     return OtherContact(
-      id: contact["id"],
       name: contact["name"],
       phone: contact["phone"],
       email: contact["email"],
@@ -20,14 +28,23 @@ class OtherContact {
   }
 }
 
+@Entity()
 class Address{
-  int? contactId;
+  @Id()
+  int? id;
+  
   String? street;
   String? suite;
   String? city;
   Geo? geo;
 
-  Address({this.contactId,this.street, this.suite, this.city, this.geo});
+  @Property(type: PropertyType.date)
+  DateTime? date;
+
+  @Transient()
+  int? computedProperty;
+
+  Address({this.id,this.street, this.suite, this.city, this.geo});
 
   factory Address.fromJson(Map address) {
     return Address(
@@ -39,12 +56,21 @@ class Address{
   }
 }
 
+@Entity()
 class Geo {
-  int? addressID;
+  @Id()
+  int? id;
+
   String? lat;
   String? lng;
 
-  Geo({this.addressID, this.lat, this.lng});
+  @Property(type: PropertyType.date)
+  DateTime? date;
+
+  @Transient()
+  int? computedProperty;
+
+  Geo({this.id, this.lat, this.lng});
 
   factory Geo.fromJson(Map geo) {
     return Geo(

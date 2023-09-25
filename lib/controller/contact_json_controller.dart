@@ -66,7 +66,7 @@ class ContactJsonController {
       otherContact.address!.suite = addressController.text;
       otherContact.address!.street = "";
       otherContact.address!.city = "";
-      DB.instance.updateTheContacts(db, otherContact.name!, otherContact.phone!, otherContact.email!, otherContact.address!.suite!, otherContact.address!.street!, otherContact.address!.city!, otherContact.address!.geo!.lat!, otherContact.address!.geo!.lng!, otherContact.id!);
+      DB.instance.updateTheContacts(db, otherContact.name!, otherContact.phone!, otherContact.email!, otherContact.address!.suite!, otherContact.address!.street!, otherContact.address!.city!, otherContact.address!.geo!.lat!, otherContact.address!.geo!.lng!);
     }
     clickEditContact();
   }
@@ -76,7 +76,7 @@ class ContactJsonController {
     Database db = await DB.instance.database();
     navigator.pop();
     navigator.pop();
-    DB.instance.deleteTheContact(db, otherContact.id!);
+    DB.instance.deleteTheContact(db);
   }
   
   void callPhone(String phone) async{

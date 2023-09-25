@@ -57,22 +57,22 @@ class DB {
     return list;
   }
 
-  Future<void> updateTheContacts(Database db, String name, String phone, String email, String suite, String street, String city, String lat, String lng, int index) async{
+  Future<void> updateTheContacts(Database db, String name, String phone, String email, String suite, String street, String city, String lat, String lng,) async{
     await db.rawUpdate(
-      "UPDATE contact SET name = '$name', phone = '$phone', email = '$email' WHERE id = '$index';"
+      "UPDATE contact SET name = '$name', phone = '$phone', email = '$email';"
     );
     await db.rawUpdate(
-      "UPDATE address SET suite = '$suite', street = '$street', city = '$city' WHERE id = '$index';"
+      "UPDATE address SET suite = '$suite', street = '$street', city = '$city';"
     );
     await db.rawUpdate(
-      "UPDATE geo SET lat = '$lat', lng = '$lng' WHERE id = '$index';"
+      "UPDATE geo SET lat = '$lat', lng = '$lng';"
     );
   }
 
-  Future<void> deleteTheContact(Database db, int index) async{
-    await db.rawDelete("DELETE FROM contact WHERE id = '$index';");
-    await db.rawDelete("DELETE FROM address WHERE id = '$index';");
-    await db.rawDelete("DELETE FROM geo WHERE id = '$index';");
+  Future<void> deleteTheContact(Database db) async{
+    await db.rawDelete("DELETE FROM contact;");
+    await db.rawDelete("DELETE FROM address;");
+    await db.rawDelete("DELETE FROM geo;");
   }
 
 }

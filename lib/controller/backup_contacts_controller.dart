@@ -6,12 +6,14 @@ import 'dart:convert';
 import 'package:meus_contatos/model/other_contacts_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:meus_contatos/repositories/objectbox_repository.dart';
 
 class BackupContactsController {
   StreamController<bool> streamDownloadFinished = StreamController<bool>.broadcast();
   StreamController<OtherContact> streamOtherContact = StreamController<OtherContact>.broadcast();
   BehaviorSubject<List<OtherContact>> behaviorListOtherContacts = BehaviorSubject<List<OtherContact>>();
   List<OtherContact> listJson = [];
+  OtherContactRepository objectBox = OtherContactRepository();
   
   Uri uri = Uri.https("jsonplaceholder.typicode.com" , "/users");
 
@@ -61,7 +63,7 @@ class BackupContactsController {
   Future<void> consumeDataJson() async {
     final future = await get(uri);
     listJson = (jsonDecode(future.body) as List).map((e) => OtherContact.fromJson(e)).toList();
-    await insertTheContacts(listJson);
+    objectBox.putManyOtherContact(listJson);
     listJson.sort((a, b) => a.name!.compareTo(b.name!));
     behaviorListOtherContacts.sink.add(listJson);
     streamDownloadFinished.sink.add(true);
