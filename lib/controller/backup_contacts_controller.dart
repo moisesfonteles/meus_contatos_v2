@@ -12,7 +12,9 @@ class BackupContactsController {
   StreamController<bool> streamDownloadFinished = StreamController<bool>.broadcast();
   StreamController<OtherContact> streamOtherContact = StreamController<OtherContact>.broadcast();
   BehaviorSubject<List<OtherContact>> behaviorListOtherContacts = BehaviorSubject<List<OtherContact>>();
-  List<OtherContact> listJson = [];
+  List<OtherContact> listOtherContact = [];
+  List<Address> listAddress = [];
+  List<Geo> listGeo = [];
   OtherContactRepository objectBox = OtherContactRepository();
   
   Uri uri = Uri.https("jsonplaceholder.typicode.com" , "/users");
@@ -49,49 +51,20 @@ class BackupContactsController {
     return newListDB;
   }
 
-  Future<void> loadingDatabase() async{
-    List<OtherContact> listDB = (await getTheContacts()).map((e) => OtherContact.fromJson(e)).toList();
-    behaviorListOtherContacts.sink.add(listDB);
-    if(listDB.isNotEmpty){
-      streamDownloadFinished.sink.add(true);
-    } else {
-      streamDownloadFinished.sink.add(false);
-    }
-    
+  void loadingObjectBox() {
+    listOtherContact = objectBox.getManyOtherContact();
+    listOtherContact.sort((a, b) => a.name!.compareTo(b.name!));
+    behaviorListOtherContacts.sink.add(listOtherContact);
   }
 
   Future<void> consumeDataJson() async {
+    objectBox.removeAllOtherContact();
     final future = await get(uri);
-    listJson = (jsonDecode(future.body) as List).map((e) => OtherContact.fromJson(e)).toList();
-    objectBox.putManyOtherContact(listJson);
-    listJson.sort((a, b) => a.name!.compareTo(b.name!));
-    behaviorListOtherContacts.sink.add(listJson);
+    listOtherContact = (jsonDecode(future.body) as List).map((e) => OtherContact.fromJson(e)).toList();
+    objectBox.putManyOtherContact(listOtherContact);
+    listOtherContact.sort((a, b) => a.name!.compareTo(b.name!));
+    behaviorListOtherContacts.sink.add(listOtherContact);
     streamDownloadFinished.sink.add(true);
-  }
-
-  Future<void> insertTheContacts(List<OtherContact> contactJson) async{
-    Database db = await DB.instance.database();
-    await db.rawQuery(
-        "DELETE FROM contact;"
-      );
-    await db.rawQuery(
-        "DELETE FROM address;"
-      );
-    await db.rawQuery(
-        "DELETE FROM geo;"
-      );
-
-    for(int i = 0; i < contactJson.length; i++){
-      await db.rawInsert(
-          "INSERT INTO contact (name, phone, email, contact_id) VALUES ('${contactJson[i].name}', '${contactJson[i].phone}', '${contactJson[i].email}', '${contactJson[i].id}');"
-      );
-      await db.rawInsert(
-          "INSERT INTO address (suite, street, city, contact_id) VALUES ('${contactJson[i].address!.suite}', '${contactJson[i].address!.street}', '${contactJson[i].address!.city}', '${contactJson[i].id}');"
-      );
-      await db.rawInsert(
-          "INSERT INTO geo (lat, lng, contact_id) VALUES ('${contactJson[i].address!.geo!.lat}', '${contactJson[i].address!.geo!.lng}', '${contactJson[i].id}')"
-      );
-    }
   }
 }
 //https://jsonplaceholder.typicode.com/users

@@ -22,13 +22,13 @@ class _MapContactJsonState extends State<MapContactJson> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.otherContact.address?.suite}, ${widget.otherContact.address?.street}, ${widget.otherContact.address?.city}"),
+        title: Text("${widget.otherContact.address.target!.suite}, ${widget.otherContact.address.target!.suite}, ${widget.otherContact.address.target!.city}"),
       ),
       body: FlutterMap(
         mapController: mapController,
         options: MapOptions(
           zoom: 16,
-          center: LatLng(double.parse("${widget.otherContact.address?.geo?.lat}"), double.parse("${widget.otherContact.address?.geo?.lng}")),
+          center: LatLng(double.parse("${widget.otherContact.address.target!.geo.target!.lat}"), double.parse("${widget.otherContact.address.target!.geo.target!.lng}")),
           minZoom: 2,
           maxZoom: 18
         ),
@@ -40,7 +40,7 @@ class _MapContactJsonState extends State<MapContactJson> {
           MarkerLayer(
             markers: [
               Marker(
-                point: LatLng(double.parse("${widget.otherContact.address?.geo?.lat}"), double.parse("${widget.otherContact.address?.geo?.lng}")),
+                point: LatLng(double.parse("${widget.otherContact.address.target!.geo.target!.lat}"), double.parse("${widget.otherContact.address.target!.geo.target!.lng}")),
                 width: 40,
                 height: 40,
                 builder: (context) => Image.asset("assets/pin.png"),

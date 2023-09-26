@@ -1,9 +1,5 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:meus_contatos/model/other_contacts_model.dart';
-
 import '../controller/backup_contacts_controller.dart';
 import 'contact_json_page.dart';
 
@@ -19,7 +15,7 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
 
   @override
   void initState() {
-    _controller.loadingDatabase();
+    _controller.loadingObjectBox();
     super.initState();
   }
 
@@ -31,13 +27,13 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      stream: _controller.streamDownloadFinished.stream,
-      initialData: false,
+    return StreamBuilder<List<OtherContact>>(
+      stream: _controller.behaviorListOtherContacts.stream,
+      initialData: const [],
       builder: (context, snapshot) {
         return Scaffold(
           appBar: appBarOtherContacts(),
-          body: snapshot.data! ? downloadContactsFinished() : downloadContactsPending(),
+          body: snapshot.data!.isNotEmpty ? downloadContactsFinished() : downloadContactsPending(),
           floatingActionButton: floatActionButton(snapshot.data!),
         );
       }
@@ -87,7 +83,7 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
             context,
             MaterialPageRoute(builder: (context) => ContactJsonPage(otherContacts: contactJson, otherContact: otherContact, index: index))
           );
-          _controller.loadingDatabase();
+          _controller.loadingObjectBox();
         },
         child: Container(
           margin: const EdgeInsets.all(6.0),
@@ -134,12 +130,11 @@ class _BackupContactsPageState extends State<BackupContactsPage> {
     );
   }
 
-  Widget floatActionButton(bool downloadFinished) {
+  Widget floatActionButton(List<OtherContact> listOtherContact) {
     return FloatingActionButton(
       backgroundColor: Colors.purple,
       onPressed: () => _controller.consumeDataJson(),
       child: const Icon(Icons.cloud_download),
     );
   }
-
 }

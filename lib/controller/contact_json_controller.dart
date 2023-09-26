@@ -1,13 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:meus_contatos/extension/extension.dart';
 import 'package:meus_contatos/model/other_contacts_model.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:meus_contatos/repositories/objectbox_repository.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../database/db.dart';
-
 
 class ContactJsonController {
   final formKey = GlobalKey<FormState>();
@@ -19,6 +15,7 @@ class ContactJsonController {
   TextEditingController addressController = TextEditingController();
   TextEditingController latController = TextEditingController();
   TextEditingController lngController = TextEditingController();
+  OtherContactRepository objectBox = OtherContactRepository();
 
   void disposeStream(){
     streamEditingContact.close();
@@ -57,26 +54,23 @@ class ContactJsonController {
     }
   }
 
-  void clickSaveContact(OtherContact otherContact) async{
-    Database db = await DB.instance.database();
+  void clickSaveContact(OtherContact otherContact) {
     if(formKey.currentState?.validate() ?? false) {
       otherContact.name = nameController.text.capitalizeWords();
       otherContact.phone = phoneController.text;
       otherContact.email = emailController.text;
-      otherContact.address!.suite = addressController.text;
-      otherContact.address!.street = "";
-      otherContact.address!.city = "";
-      DB.instance.updateTheContacts(db, otherContact.name!, otherContact.phone!, otherContact.email!, otherContact.address!.suite!, otherContact.address!.street!, otherContact.address!.city!, otherContact.address!.geo!.lat!, otherContact.address!.geo!.lng!);
+      otherContact.address.target!.suite = addressController.text;
+      otherContact.address.target!.street = "";
+      otherContact.address.target!.city = "";
     }
+    objectBox.putOtherContact(otherContact);
     clickEditContact();
   }
 
-  Future<void> deleteContact(int index, BuildContext context, OtherContact otherContact) async{
-    NavigatorState navigator = Navigator.of(context);
-    Database db = await DB.instance.database();
-    navigator.pop();
-    navigator.pop();
-    DB.instance.deleteTheContact(db);
+  void deleteContact(int index, BuildContext context, OtherContact otherContact) {
+    objectBox.removeOtherContact(otherContact);
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
   
   void callPhone(String phone) async{

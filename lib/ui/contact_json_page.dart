@@ -24,9 +24,9 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
     _controller.nameController.text = widget.otherContact.name!;
     _controller.phoneController.text = widget.otherContact.phone!;
     _controller.emailController.text = widget.otherContact.email!;
-    widget.otherContact.address!.street == "" && widget.otherContact.address!.city == "" ?
-    _controller.addressController.text = "${widget.otherContact.address!.suite}" :
-    _controller.addressController.text = "${widget.otherContact.address!.suite}, ${widget.otherContact.address!.street}, ${widget.otherContact.address!.city}";
+    widget.otherContact.address.target!.street == "" && widget.otherContact.address.target!.city == "" ?
+    _controller.addressController.text = "${widget.otherContact.address.target!.suite}" :
+    _controller.addressController.text = "${widget.otherContact.address.target!.suite}, ${widget.otherContact.address.target!.street}, ${widget.otherContact.address.target!.city}";
     super.initState();
   }
 
@@ -197,8 +197,7 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
                                         style: TextButton.styleFrom(foregroundColor: Colors.purple[700]),
                                         child: const Text("Cancelar"),
                                       ),
-                                      TextButton(
-                                        // onPressed: () => _controller.deleteContact(_controller.index, context, widget.contact),
+                                      TextButton( 
                                         onPressed: () => _controller.deleteContact(widget.index, context, widget.otherContact),
                                         style: TextButton.styleFrom(foregroundColor: Colors.purple[700]),
                                         child: const Text("Excluir"),
@@ -235,9 +234,9 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
-                        child: widget.otherContact.address!.street == "" && widget.otherContact.address!.city == "" ?
-                        Text("${widget.otherContact.address!.suite}", style: const TextStyle(fontSize: 19), textAlign: TextAlign.center) :
-                        Text("${widget.otherContact.address?.suite}, ${widget.otherContact.address?.street}, ${widget.otherContact.address?.city}" , style: const TextStyle(fontSize: 19), textAlign: TextAlign.center),
+                        child: widget.otherContact.address.target!.street == "" && widget.otherContact.address.target!.city == "" ?
+                        Text("${widget.otherContact.address.target!.suite}", style: const TextStyle(fontSize: 19), textAlign: TextAlign.center) :
+                        Text("${widget.otherContact.address.target!.suite}, ${widget.otherContact.address.target!.street}, ${widget.otherContact.address.target!.city}" , style: const TextStyle(fontSize: 19), textAlign: TextAlign.center),
                       ),
                     },
                   ],
@@ -254,7 +253,7 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
     return FlutterMap(
       options: MapOptions(
         zoom: 16,
-        center: LatLng(double.parse("${widget.otherContact.address?.geo?.lat}"), double.parse("${widget.otherContact.address?.geo?.lng}")),
+        center: LatLng(double.parse("${widget.otherContact.address.target!.geo.target!.lat}"), double.parse("${widget.otherContact.address.target!.geo.target!.lng}")),
         minZoom: 10.0,
         maxZoom: 18
       ),
@@ -266,7 +265,7 @@ class _ContactJsonPageState extends State<ContactJsonPage> {
         MarkerLayer(
           markers: [
             Marker(
-              point: LatLng(double.parse("${widget.otherContact.address?.geo?.lat}"), double.parse("${widget.otherContact.address?.geo?.lng}")),
+              point: LatLng(double.parse("${widget.otherContact.address.target!.geo.target!.lat}"), double.parse("${widget.otherContact.address.target!.geo.target!.lng}")),
               width: 40,
               height: 40,
               builder: (context) => Image.asset("assets/pin.png"),

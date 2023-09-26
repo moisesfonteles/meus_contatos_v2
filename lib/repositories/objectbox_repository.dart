@@ -12,23 +12,25 @@ class OtherContactRepository {
 
   void putOtherContact(OtherContact otherContact) {
     contactsBox.put(otherContact);
-  }
+  }  
 
   void putManyOtherContact(List<OtherContact> listOtherContact) {
     final contacts = contactsBox.putMany(listOtherContact);
     log("$contacts");
   }
 
-  void putManyAddress(List<Address> listAddress) {
-    addressBox.putMany(listAddress);
+  List<OtherContact> getManyOtherContact() {
+    List<OtherContact> listOtherContact = [];
+    listOtherContact = contactsBox.getAll();
+    return listOtherContact;
   }
 
-  void putManyGeo(List<Geo> listGeo) {
-    geoBox.putMany(listGeo);
+  void removeOtherContact(OtherContact otherContact) {
+    contactsBox.remove(otherContact.id);
   }
 
-  void getManyOtherContact(List<OtherContact> listOtherContact) {
-    
+  void removeAllOtherContact() {
+    contactsBox.removeAll();
   }
 }
 

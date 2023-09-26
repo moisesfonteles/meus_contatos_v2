@@ -5,10 +5,11 @@ class OtherContact {
   @Id()
   int id = 0;
 
+  final ToOne<Address> address = ToOne<Address>();
+
   String? name;
   String? phone;
   String? email;
-  Address? address;
   
   @Property(type: PropertyType.date)
   DateTime? date;
@@ -16,27 +17,27 @@ class OtherContact {
   @Transient()
   int? computedProperty;
 
-  OtherContact({this.name, this.phone, this.email, this.address});
+  OtherContact({this.name, this.phone, this.email});
 
   factory OtherContact.fromJson(Map contact) {
     return OtherContact(
       name: contact["name"],
       phone: contact["phone"],
-      email: contact["email"],
-      address: Address.fromJson(contact["address"])
-    );
+      email: contact["email"]
+    )..address.target = Address.fromJson(contact["address"]);
   }
 }
 
 @Entity()
 class Address{
   @Id()
-  int? id;
+  int id = 0;
+
+  final ToOne<Geo> geo = ToOne<Geo>();
   
   String? street;
   String? suite;
   String? city;
-  Geo? geo;
 
   @Property(type: PropertyType.date)
   DateTime? date;
@@ -44,22 +45,21 @@ class Address{
   @Transient()
   int? computedProperty;
 
-  Address({this.id,this.street, this.suite, this.city, this.geo});
+  Address({this.street, this.suite, this.city});
 
   factory Address.fromJson(Map address) {
     return Address(
       street: address["street"],
       suite: address["suite"],
-      city: address["city"],
-      geo: Geo.fromJson(address["geo"])
-    );
+      city: address["city"]
+    )..geo.target = Geo.fromJson(address["geo"]);
   }
 }
 
 @Entity()
 class Geo {
   @Id()
-  int? id;
+  int id = 0;
 
   String? lat;
   String? lng;
@@ -70,7 +70,7 @@ class Geo {
   @Transient()
   int? computedProperty;
 
-  Geo({this.id, this.lat, this.lng});
+  Geo({this.lat, this.lng});
 
   factory Geo.fromJson(Map geo) {
     return Geo(

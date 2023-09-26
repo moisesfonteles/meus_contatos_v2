@@ -13,7 +13,6 @@ late ObjectBox objectbox;
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   objectbox = await ObjectBox.create();
-  // contactsBox = objectbox.store.box<OtherContact>();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   DB.instance.getTheContacts(await DB.instance.database());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

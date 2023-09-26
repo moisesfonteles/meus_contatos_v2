@@ -22,7 +22,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(1, 3145352345801008460),
       name: 'Address',
-      lastPropertyId: const IdUid(5, 933278911113536730),
+      lastPropertyId: const IdUid(7, 8924740731248799412),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -49,14 +49,21 @@ final _entities = <ModelEntity>[
             id: const IdUid(5, 933278911113536730),
             name: 'date',
             type: 10,
-            flags: 0)
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(7, 8924740731248799412),
+            name: 'geoId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(3, 1877987824912070109),
+            relationTarget: 'Geo')
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
       id: const IdUid(2, 2539061360565244249),
       name: 'Geo',
-      lastPropertyId: const IdUid(4, 5782071693254560446),
+      lastPropertyId: const IdUid(5, 3402286285426577956),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -85,7 +92,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(3, 7513325272235705745),
       name: 'OtherContact',
-      lastPropertyId: const IdUid(5, 7172226808607038824),
+      lastPropertyId: const IdUid(6, 1214416268686140105),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -112,7 +119,14 @@ final _entities = <ModelEntity>[
             id: const IdUid(5, 7172226808607038824),
             name: 'date',
             type: 10,
-            flags: 0)
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(6, 1214416268686140105),
+            name: 'addressId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(4, 5668536433042913766),
+            relationTarget: 'Address')
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
@@ -139,12 +153,12 @@ ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(3, 7513325272235705745),
-      lastIndexId: const IdUid(0, 0),
+      lastIndexId: const IdUid(4, 5668536433042913766),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
-      retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredIndexUids: const [4571028938055024345, 7714373750958896774],
+      retiredPropertyUids: const [6627392237589385589, 3402286285426577956],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -153,7 +167,7 @@ ModelDefinition getObjectBoxModel() {
   final bindings = <Type, EntityDefinition>{
     Address: EntityDefinition<Address>(
         model: _entities[0],
-        toOneRelations: (Address object) => [],
+        toOneRelations: (Address object) => [object.geo],
         toManyRelations: (Address object) => {},
         getId: (Address object) => object.id,
         setId: (Address object, int id) {
@@ -166,14 +180,15 @@ ModelDefinition getObjectBoxModel() {
               object.suite == null ? null : fbb.writeString(object.suite!);
           final cityOffset =
               object.city == null ? null : fbb.writeString(object.city!);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.id ?? 0);
+          fbb.startTable(8);
+          fbb.addInt64(0, object.id);
           fbb.addOffset(1, streetOffset);
           fbb.addOffset(2, suiteOffset);
           fbb.addOffset(3, cityOffset);
           fbb.addInt64(4, object.date?.millisecondsSinceEpoch);
+          fbb.addInt64(6, object.geo.targetId);
           fbb.finish(fbb.endTable());
-          return object.id ?? 0;
+          return object.id;
         },
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
@@ -181,18 +196,19 @@ ModelDefinition getObjectBoxModel() {
           final dateValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 12);
           final object = Address(
-              id: const fb.Int64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 4),
               street: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 6),
               suite: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 8),
               city: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 10))
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
             ..date = dateValue == null
                 ? null
                 : DateTime.fromMillisecondsSinceEpoch(dateValue);
-
+          object.geo.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          object.geo.attach(store);
           return object;
         }),
     Geo: EntityDefinition<Geo>(
@@ -208,13 +224,13 @@ ModelDefinition getObjectBoxModel() {
               object.lat == null ? null : fbb.writeString(object.lat!);
           final lngOffset =
               object.lng == null ? null : fbb.writeString(object.lng!);
-          fbb.startTable(5);
-          fbb.addInt64(0, object.id ?? 0);
+          fbb.startTable(6);
+          fbb.addInt64(0, object.id);
           fbb.addOffset(1, latOffset);
           fbb.addOffset(2, lngOffset);
           fbb.addInt64(3, object.date?.millisecondsSinceEpoch);
           fbb.finish(fbb.endTable());
-          return object.id ?? 0;
+          return object.id;
         },
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
@@ -222,12 +238,11 @@ ModelDefinition getObjectBoxModel() {
           final dateValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 10);
           final object = Geo(
-              id: const fb.Int64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 4),
               lat: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 6),
               lng: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 8))
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
             ..date = dateValue == null
                 ? null
                 : DateTime.fromMillisecondsSinceEpoch(dateValue);
@@ -236,7 +251,7 @@ ModelDefinition getObjectBoxModel() {
         }),
     OtherContact: EntityDefinition<OtherContact>(
         model: _entities[2],
-        toOneRelations: (OtherContact object) => [],
+        toOneRelations: (OtherContact object) => [object.address],
         toManyRelations: (OtherContact object) => {},
         getId: (OtherContact object) => object.id,
         setId: (OtherContact object, int id) {
@@ -249,12 +264,13 @@ ModelDefinition getObjectBoxModel() {
               object.phone == null ? null : fbb.writeString(object.phone!);
           final emailOffset =
               object.email == null ? null : fbb.writeString(object.email!);
-          fbb.startTable(6);
+          fbb.startTable(7);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
           fbb.addOffset(2, phoneOffset);
           fbb.addOffset(3, emailOffset);
           fbb.addInt64(4, object.date?.millisecondsSinceEpoch);
+          fbb.addInt64(5, object.address.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -274,7 +290,9 @@ ModelDefinition getObjectBoxModel() {
             ..date = dateValue == null
                 ? null
                 : DateTime.fromMillisecondsSinceEpoch(dateValue);
-
+          object.address.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          object.address.attach(store);
           return object;
         })
   };
@@ -299,6 +317,10 @@ class Address_ {
 
   /// see [Address.date]
   static final date = QueryIntegerProperty<Address>(_entities[0].properties[4]);
+
+  /// see [Address.geo]
+  static final geo =
+      QueryRelationToOne<Address, Geo>(_entities[0].properties[5]);
 }
 
 /// [Geo] entity fields to define ObjectBox queries.
@@ -337,4 +359,8 @@ class OtherContact_ {
   /// see [OtherContact.date]
   static final date =
       QueryIntegerProperty<OtherContact>(_entities[2].properties[4]);
+
+  /// see [OtherContact.address]
+  static final address =
+      QueryRelationToOne<OtherContact, Address>(_entities[2].properties[5]);
 }
