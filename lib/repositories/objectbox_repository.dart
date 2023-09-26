@@ -22,6 +22,7 @@ class OtherContactRepository {
   List<OtherContact> getManyOtherContact() {
     List<OtherContact> listOtherContact = [];
     listOtherContact = contactsBox.getAll();
+    log("$listOtherContact");
     return listOtherContact;
   }
 

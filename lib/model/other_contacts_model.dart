@@ -26,6 +26,9 @@ class OtherContact {
       email: contact["email"]
     )..address.target = Address.fromJson(contact["address"]);
   }
+
+  @override
+  String toString() => "{$id, $name, $phone, $email, ${address.target!.suite}, ${address.target!.street}, ${address.target!.city}, ${address.target!.geo.target!.lat}, ${address.target!.geo.target!.lng}}";
 }
 
 @Entity()
